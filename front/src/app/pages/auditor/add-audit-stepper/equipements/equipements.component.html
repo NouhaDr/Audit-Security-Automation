@@ -1,0 +1,83 @@
+<div class="card">
+    <div class="grid justify-content-between col">
+        <div>
+            <h4 class="mb-5">Select equipements</h4>
+        </div>
+        <p-button icon="pi pi-plus" label="Equipement" (onClick)="showAddDialog()" class="mx-2"></p-button>
+    </div>
+    <div *ngIf="rawEquipements.length != 0">
+        <div class="grid p-fluid">
+            <div class="col-12" [ngClass]="{'md:col-12' : !selectedEquipement,'md:col-5' : selectedEquipement }">
+                <p-accordion>
+                    <p-accordionTab *ngFor="let key of getKeys(groupedEquipements)">
+                        <ng-template pTemplate="header">
+                            <span class="flex align-items-center gap-2 w-full" style="word-break: break-all;">
+                                <span class="font-bold">
+                                    {{ key }}
+                                </span>
+                                <p-badge [value]="groupedEquipements[key].length" class="ml-auto mr-2" />
+                            </span>
+                        </ng-template>
+                        <div class="flex flex-column" *ngFor="let item of groupedEquipements[key]; let i = index">
+                            <div class="flex gap-1 justify-content-between">
+                                <p-button [text]="true" icon="pi pi-eye"  [label]="item.category + ' ' + item.ref" severity="secondary"
+                                (click)="handleEquipementShow(item)" />
+                               <div class="flex">
+                                    <p-button [text]="true" icon="pi pi-pencil" severity="info"
+                                    (click)="handleEquipementEdit(item)" />
+                                    <p-button [text]="true" icon="pi pi-trash" severity="danger"
+                                    (click)="handleEquipementRemove(item)" />
+                                </div>
+                            </div>
+                        </div>
+                    </p-accordionTab>
+                </p-accordion>
+            </div>
+            <div class="col-12 md:col-7" *ngIf="selectedEquipement">
+                <div class="card">
+                    <div class="flex justify-content-between align-items-center">
+                        <h5 class="text-bold">Category</h5>
+                        <span>{{ selectedEquipement.category }}</span>
+                    </div>
+                    <p-divider />
+                    <div class="flex justify-content-between align-items-center">
+                        <h5 class="font-bold">Sub category</h5>
+                        <span>{{ selectedEquipement.subcategory }}</span>
+                    </div>
+                    <p-divider />
+                    <div class="flex justify-content-between align-items-center">
+                        <h5 class="font-bold">Manufacturer</h5>
+                        <span>{{ selectedEquipement.manufacturer }}</span>
+                    </div>
+                    <p-divider />
+                    <div class="flex justify-content-between align-items-center">
+                        <h5 class="font-bold">Réference</h5>
+                        <span>{{ selectedEquipement.ref }}</span>
+                    </div>
+                    <p-divider />
+                    <div class="flex justify-content-between align-items-center">
+                        <h5 class="font-bold">Details</h5>
+                        <span>{{ selectedEquipement.details }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="rawEquipements.length == 0" class="p-fluid mb-5">
+        <div class="card">
+            <h5 class="mb-0 text-center">No equipement selected yet</h5>   
+        </div>       
+    </div>
+    <div class="grid justify-content-end col">
+        <p-button label="Back" (onClick)="goBack()" class="mx-2"></p-button>
+        <p-button label="Next" (onClick)="goNext()"></p-button>
+    </div>
+</div>
+
+<app-add-equipement-dialog 
+    (dismiss)="addEquipementDialogVisible=false;dialoagMode = ''" 
+    (callback)="addNewEquipementCallback($event)"
+    [selectedEquipement]="selectedEquipement"
+    [mode]="dialoagMode"
+    [addEquipementDialogVisible]="addEquipementDialogVisible">
+</app-add-equipement-dialog>

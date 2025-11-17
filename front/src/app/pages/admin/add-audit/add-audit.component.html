@@ -1,0 +1,105 @@
+<div class="grid p-fluid">
+    <div class="col-12">
+        <div class="card">
+            <h5 class="font-bold">Create New Audit</h5>
+            <form [formGroup]="createAuditForm" (ngSubmit)="handleSubmit()">
+                <div class="p-fluid p-formgrid grid">
+                    <!-- Client and Auditors -->
+                    <div class="field col-12 md:col-6">
+                        <label for="client">Select Client <span class="text-red-500">*</span></label>
+                        <p-dropdown id="client" [options]="clients" [showClear]="true" formControlName="client"
+                                    optionLabel="firstName" optionValue="_id" placeholder="Select a client" class="w-full">
+                            <ng-template pTemplate="dropdownicon"><i class="pi pi-user"></i></ng-template>
+                        </p-dropdown>
+                        <small *ngIf="createAuditForm.get('client').touched && createAuditForm.get('client').errors?.['required']"
+                               class="p-error">This field is required</small>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="auditors">Select Auditors <span class="text-red-500">*</span></label>
+                        <p-multiSelect id="auditors" [options]="filteredAuditors" formControlName="auditors"
+                                       optionLabel="firstName" optionValue="_id" display="chip" [showClear]="true"
+                                       placeholder="Select auditors" class="w-full">
+                            <ng-template pTemplate="dropdownicon"><i class="pi pi-users"></i></ng-template>
+                        </p-multiSelect>
+                        <small *ngIf="createAuditForm.get('auditors').touched && createAuditForm.get('auditors').errors?.['required']"
+                               class="p-error">This field is required</small>
+                    </div>
+
+                    <!-- Audit Leader and Organisation Name -->
+                    <div class="field col-12 md:col-6">
+                        <label for="auditleaders">Select Audit Leader <span class="text-red-500">*</span></label>
+                        <p-dropdown id="auditleaders" [options]="filteredAuditleaders" formControlName="auditleaders"
+                                    optionLabel="firstName" optionValue="_id" [showClear]="true" placeholder="Select audit leader" class="w-full">
+                            <ng-template pTemplate="dropdownicon"><i class="pi pi-star"></i></ng-template>
+                        </p-dropdown>
+                        <small *ngIf="createAuditForm.get('auditleaders').touched && createAuditForm.get('auditleaders').errors?.['required']"
+                               class="p-error">This field is required</small>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="organisationName">Organisation Name <span class="text-red-500">*</span></label>
+                        <input pInputText id="organisationName" type="text" formControlName="organisationName" class="w-full" placeholder="Enter organisation name" />
+                        <small *ngIf="createAuditForm.get('organisationName').touched && createAuditForm.get('organisationName').errors?.['required']"
+                               class="p-error">Organisation name is required</small>
+                    </div>
+
+                    <!-- Contract Number and Phone Number -->
+                    <div class="field col-12 md:col-6">
+                        <label for="contactNumber">Contract Number <span class="text-red-500">*</span></label>
+                        <input pInputText id="contactNumber" type="text" formControlName="contactNumber" class="w-full" placeholder="Enter contract number" />
+                        <small *ngIf="createAuditForm.get('contactNumber').touched && createAuditForm.get('contactNumber').errors?.['required']"
+                               class="p-error">Contact number is required</small>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="phoneNumber">Phone Number <span class="text-red-500">*</span></label>
+                        <input pInputText id="phoneNumber" type="text" formControlName="phoneNumber" class="w-full" placeholder="Enter phone number" />
+                        <small *ngIf="createAuditForm.get('phoneNumber').touched && createAuditForm.get('phoneNumber').errors?.['required']"
+                               class="p-error">Phone number is required</small>
+                    </div>
+
+                    <!-- Website and Employees Number -->
+                    <div class="field col-12 md:col-6">
+                        <label for="website">Website</label>
+                        <input pInputText id="website" type="text" formControlName="website" class="w-full" placeholder="Enter website URL" />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="employeesNumber">Employees Number <span class="text-red-500">*</span></label>
+                        <input pInputText id="employeesNumber" type="number" min="0" formControlName="employeesNumber" class="w-full" placeholder="Enter total employees" />
+                        <small *ngIf="createAuditForm.get('employeesNumber').touched && createAuditForm.get('employeesNumber').errors?.['required']"
+                               class="p-error">Employees number is required</small>
+                    </div>
+
+                    <!-- Employees in Perimeter and Contact Name -->
+                    <div class="field col-12 md:col-6">
+                        <label for="employeesInPerimeter">Employees in Perimeter</label>
+                        <input pInputText id="employeesInPerimeter" type="number" min="0" formControlName="employeesInPerimeter" class="w-full" placeholder="Enter employees in perimeter" />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="contactName">Contact Name <span class="text-red-500">*</span></label>
+                        <input pInputText id="contactName" type="text" formControlName="contactName" class="w-full" placeholder="Enter contact person name" />
+                        <small *ngIf="createAuditForm.get('contactName').touched && createAuditForm.get('contactName').errors?.['required']"
+                               class="p-error">Contact name is required</small>
+                    </div>
+
+                    <!-- Contact Email -->
+                    <div class="field col-12 md:col-6">
+                        <label for="contactEmail">Contact Email <span class="text-red-500">*</span></label>
+                        <input pInputText id="contactEmail" type="text" formControlName="contactEmail" class="w-full" placeholder="Enter contact email" />
+                        <small *ngIf="createAuditForm.get('contactEmail').touched && createAuditForm.get('contactEmail').errors?.['required']"
+                               class="p-error">Contact email is required</small>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mt-3">
+                    <p-button label="Add" severity="contrast" [loading]="submitted" [disabled]="!createAuditForm.valid"
+                              (onClick)="handleSubmit()"></p-button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

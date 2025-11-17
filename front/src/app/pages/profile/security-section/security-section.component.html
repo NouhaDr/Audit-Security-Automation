@@ -1,0 +1,19 @@
+<form [formGroup]="passwordForm">
+                        
+    <div class="p-fluid mb-2">
+        <label for="">Old password</label>
+        <p-password formControlName="oldPassword" [toggleMask]="true" [feedback]="false"/>
+        <small></small>
+    </div>
+    <div class="p-fluid mb-2">
+        <label for="">New password</label>
+        <p-password formControlName="newPassword" [toggleMask]="true"/>
+    </div>
+    <div class="p-fluid mb-2">
+        <label for="">Confirm new password</label>
+        <p-password formControlName="confirmNewPassword" [toggleMask]="true"/>
+    </div>
+    <div class="p-fluid">
+        <p-button label="Save" [disabled]="passwordLoading || !passwordForm.valid" [loading]="passwordLoading" (onClick)="handlePasswordChange()"></p-button>
+    </div>
+</form>

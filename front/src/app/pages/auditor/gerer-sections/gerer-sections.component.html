@@ -1,0 +1,72 @@
+<p-toast></p-toast>
+
+<div class="card shadow-2 p-4">
+  <h5 class="font-bold text-2xl mb-4">Audit Sections</h5>
+
+  <div>
+    <p-accordion class="w-full" [multiple]="true">
+      <ng-container *ngFor="let section of sections">
+        <p-accordionTab 
+          *ngIf="section.status === 'not confirmed' && section.nom !== 'Infrastructure' && section.nom !== 'Files'">
+
+          <!-- Custom Header -->
+          <ng-template pTemplate="header">
+            <div class="flex justify-content-between align-items-center w-full">
+              <div class="flex align-items-center gap-3">
+                <div class="w-3rem h-3rem flex align-items-center justify-content-center  border-circle">
+                  <i class="pi pi-folder text-xl "></i>
+                </div>
+                <span class="font-bold text-lg ">{{ section.nom }}</span>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex gap-2">
+                <p-button 
+                  icon="pi pi-pencil" 
+                  severity="info"
+                  [rounded]="true"
+                  [outlined]="true"
+                  (click)="editSection(section)">
+                </p-button>
+
+                <p-button
+                  icon="pi pi-trash" 
+                  severity="danger"
+                  [rounded]="true"
+                  [outlined]="true"
+                  (click)="openConfirmationDialog(section._id)">
+                </p-button>
+              </div>
+            </div>
+          </ng-template>
+
+          <!-- Champs -->
+          <div *ngIf="section.champs?.length" class="mt-3">
+            <div 
+              *ngFor="let champ of section.champs" 
+              class="p-3 mb-2 bg-gray-50 border-left-4 rounded">
+              <span class="font-medium">{{ champ.label }}</span>
+            </div>
+          </div>
+        </p-accordionTab>
+      </ng-container>
+    </p-accordion>
+  </div>
+
+  <!-- ✅ Dialog conditionné -->
+  <app-edit-section-dialog 
+    *ngIf="displayEditDialog"
+    [(displayDialog)]="displayEditDialog" 
+    [section]="selectedSection"
+    [selectedAuditId]="auditId"
+    (sectionUpdated)="loadSections()">
+  </app-edit-section-dialog>
+
+  <!-- Confirmation Dialog -->
+  <app-custom-confirm-dialog 
+    #confirmationDialog
+    [key]="'delete'"
+    (onAccept)="handleSectionDelete()"
+    (onReject)="clearLoading()">
+  </app-custom-confirm-dialog>
+</div>

@@ -1,0 +1,106 @@
+<p-dialog 
+header="Add New Equipement" 
+[modal]="true" 
+[(visible)]="addEquipementDialogVisible" 
+[style]="{ width: '50rem' }"
+(onHide)="onDismiss()"
+>
+    <form [formGroup]="createEquipementForm">
+        <div class="p-fluid p-formgrid">
+            <div class="flex align-items-center gap-3 mb-5">
+                <label class="font-semibold w-10rem">Select category</label>
+                <div class="flex-auto">
+                    <p-dropdown 
+                    [options]="categories" 
+                    [showClear]="true" 
+                    optionValue=""
+                    formControlName="category" 
+                    placeholder="Select a category"/>
+                    <small
+                        *ngIf="createEquipementForm.get('category').touched && createEquipementForm.get('category').errors?.['required']"
+                        class="p-error">Category field is required
+                    </small>
+                </div>
+            </div>        
+        </div>
+        <div class="p-fluid p-formgrid">
+            <div class="flex align-items-center gap-3 mb-5">
+                <label class="font-semibold w-10rem">Select sub category</label>
+                <div class="flex-auto">
+                    <p-dropdown 
+                    [options]="sub_categories" 
+                    [showClear]="true" 
+                    formControlName="subcategory" 
+                    placeholder="Select a category"/>
+                    <small
+                        *ngIf="createEquipementForm.get('subcategory').touched && createEquipementForm.get('subcategory').errors?.['required']"
+                        class="p-error">Sub category field is required
+                    </small>
+                </div>
+            </div>        
+        </div>
+
+        <div class="p-fluid p-formgrid">
+            <div class="flex align-items-center gap-3 mb-5 ">
+                <label class="font-semibold w-10rem">Référence</label>
+                <div class="flex flex-column justify-contant-start flex-auto">
+                    <p-autoComplete 
+                        formControlName="ref" 
+                        [suggestions]="suggestedEquipements" 
+                        [group]="true"
+                        field="ref">
+                        <ng-template let-group pTemplate="group">
+                            <div class="flex flex-column gap-2">
+                                <div class="flex gap-1 align-items-center">
+                                    <div
+                                        class="w-2rem h-2rem flex align-items-center justify-content-center bg-gray-100 border-circle mr-3 flex-shrink-0">
+                                        <i class="pi text-xl text-gray-500" [class]="group?.icon"></i>
+                                    </div>
+                                    <span>{{ group?.category }}</span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </p-autoComplete>
+                    <small
+                        *ngIf="createEquipementForm.get('ref').touched && createEquipementForm.get('ref').errors?.['required']"
+                        class="p-error">Référence field is required
+                    </small>
+                </div>
+            </div>           
+        </div>
+
+        <div class="p-fluid p-formgrid">
+            <div class="flex align-items-center gap-3 mb-5 ">
+                <label class="font-semibold w-10rem">Manufacturer</label>
+                <div class="flex flex-column justify-contant-start flex-auto">
+                    <input pInputText type="text" formControlName="manufacturer" class="flex-auto"/>
+                    <small
+                        *ngIf="createEquipementForm.get('manufacturer').touched && createEquipementForm.get('manufacturer').errors?.['required']"
+                        class="p-error">Manufacturer field is required
+                    </small>
+                </div>
+            </div>           
+        </div>
+
+        <div class="p-fluid p-formgrid">
+            <div class="flex align-items-center gap-3 mb-5 ">
+                <label class="font-semibold w-10rem">Details</label>
+                <div class="flex flex-column justify-contant-start flex-auto">
+                    <input pInputText type="text" formControlName="details" class="flex-auto"/>
+                    <small
+                        *ngIf="createEquipementForm.get('details').touched && createEquipementForm.get('details').errors?.['required']"
+                        class="p-error">Détails field is required
+                    </small>
+                </div>
+            </div>           
+        </div>
+    </form>
+    
+    
+    
+    <ng-template pTemplate="footer">
+        <p-button label="Cancel" severity="danger" [outlined]="true" (onClick)="onDismiss()" />
+        <p-button label="Save"  severity="contrast" (onClick)="handleSubmit()"
+        [disabled]="submitted || !createEquipementForm.valid" />
+    </ng-template>
+</p-dialog>

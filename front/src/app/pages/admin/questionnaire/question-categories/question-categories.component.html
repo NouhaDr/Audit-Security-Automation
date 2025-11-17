@@ -1,0 +1,102 @@
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+			<h5 class="font-bold">Question Categories</h5>
+			<p-table #dt1 [value]="filteredCategories" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-end flex-column sm:flex-row">
+						<!-- <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt1)"></button> -->
+						 <!--
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="handleSearch($event)" placeholder="Search Keyword" class="w-full"/>
+						</span>
+						<p-button label="Reload" [loading]="loading" (onClick)="getCategories()" class="mx-2"></p-button>
+						-->
+						<p-button icon="pi pi-plus" label="Create" severity="contrast" (onClick)="editDialogVisible = true"></p-button>
+					</div>
+				</ng-template>
+				<!-- table header -->
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 12rem">
+							<div class="flex justify-content-between align-items-center">
+								Category
+							</div>
+						</th>
+						<th style="min-width: 12rem">
+							<div class="flex justify-content-between align-items-center">
+								Sub categories
+							</div>
+						</th>
+						<th style="min-width: 10rem">
+							<div class="flex justify-content-between align-items-center">
+								Actions
+							</div>
+						</th>
+					</tr>
+				</ng-template>
+				<!-- table body -->
+				<ng-template pTemplate="body" let-category>
+					<tr>
+						<td>
+							{{category.label}}
+						</td>
+						<td>
+							<div style="display: flex;gap: 5px;flex-wrap: wrap;">
+								<p-chip [label]="c" *ngFor="let c of category?.subcategories" />
+							</div>
+						</td>
+						<td>
+							<div style="display: flex;gap: 5px;">
+								<button 
+									pButton 
+									pRipple 
+									type="button" 
+									icon="pi pi-pencil" 
+									class="p-button-rounded p-button-outlined" 
+									(click)="selectedCategory=category;editDialogVisible=true">
+								</button>
+								<p-button 
+									icon="pi pi-trash"
+									severity="danger" 
+									[rounded]="true" 
+									[outlined]="true"  
+									[loading]="category._id === categoryDeleteLoading" 
+									[disabled]="category._id === categoryDeleteLoading" 
+									key="delete" 
+									(click)="selectCategoryToDelete(category._id);deleteDialog.show()"
+								></p-button>
+							</div>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="8">No Question found.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="8">Loading Question data. Please wait.</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
+
+	</div>
+</div>
+
+ <app-custom-confirm-dialog 
+	#deleteDialog
+	[key]="'delete'"
+	(onAccept)="handleCategoryDelete()"
+	(onReject)="clearLoading()"
+></app-custom-confirm-dialog>
+
+<app-add-question-category-dialog 
+	[selectedCategory]="selectedCategory" 
+	(callback)="handleCallback($event)"
+	[editDialogVisible]="editDialogVisible"
+	(dismiss)="editDialogVisible = false"
+></app-add-question-category-dialog> 

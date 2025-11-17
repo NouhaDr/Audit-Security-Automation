@@ -1,0 +1,11 @@
+<div *ngIf="files">
+    <ul class="py-2 mx-0 mt-0 list-none grey-on-hover" *ngFor="let file of files">
+        <li class="flex align-items-center surface-border">
+            <div class="w-3rem h-3rem flex align-items-center justify-content-center border-circle mr-3 flex-shrink-0 bg-blue-50">
+                <i class="text-xl pi pi-file text-blue-500" style="font-size: 1.5rem"></i>
+            </div>
+            <span class="text-900 font-bold line-height-3">{{ file?.title }}</span>
+            <br>
+        </li>
+    </ul>
+</div>

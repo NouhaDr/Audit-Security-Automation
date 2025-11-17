@@ -1,0 +1,22 @@
+<ul class="p-0 mx-0 mt-0 mb-4 list-none" *ngFor="let item of infrastructure">
+    <li class="flex align-items-center py-2 surface-border">
+        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-gray-100 border-circle mr-3 flex-shrink-0">
+            <i class="text-xl text-gray-500" [class]="item?.icon"></i>
+        </div>
+        <span class="text-900 line-height-3">{{ item?.category }}</span>
+        <br>
+    </li>
+    <ul class="pl-5 mx-0 mt-0 mb-4 list-none">
+        <li class="flex align-items-center py-2 surface-border grey-on-hover px-2" *ngFor="let item of item?.items" >
+            <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-gray-200 border-circle mr-3 flex-shrink-0">
+                <i class="pi pi-angle-right text-xl text-gray-500"></i>
+            </div>
+            <div class="flex flex-column gap-2">
+                <span class="text-400 line-height-1"><span class="font-bold">Manufacturer :</span> {{ item.manufacturer }}</span>
+                <span class="text-900 line-height-1"><span class="font-bold">Réference :</span> {{ item.ref }}</span>
+                <span class="text-900 line-height-1"><span class="font-bold">Détails :</span> {{ item.details }}</span>
+            </div>
+        </li>
+    </ul>
+    <p-divider/>
+</ul>

@@ -1,0 +1,108 @@
+<p-dialog 
+    header="Edit audit details" 
+    [modal]="true" 
+    [(visible)]="editDialogVisible" 
+    [style]="{ width: '50rem' }"
+    (onHide)="onDismiss()"
+>
+    <form [formGroup]="createAuditForm">
+        <div class="p-fluid p-formgrid grid">
+            
+            <!-- Client -->
+            <div class="field col-12 md:col-6">
+                <label class="font-semibold">Select client</label>
+                <p-dropdown 
+                    [options]="clients" 
+                    [showClear]="true" 
+                    formControlName="client" 
+                    optionLabel="firstName" 
+                    optionValue="_id"
+                    placeholder="Select a client"
+                    class="w-full"
+                />
+            </div>
+
+            <!-- Auditors -->
+            <div class="field col-12 md:col-6">
+                <label class="font-semibold">Select auditor</label>
+                <p-multiSelect 
+                    [options]="filteredAuditors"  
+                    formControlName="auditors" 
+                    optionLabel="firstName"
+                    optionValue="_id"
+                    display="chip" 
+                    [showClear]="true" 
+                    placeholder="Select auditors"
+                    class="w-full"
+                />
+            </div>
+
+            <div class="field col-12 md:col-6">
+                <label class="font-semibold">Select audit leader</label>
+                <p-dropdown 
+                class="custom-dropdown field md:col-12"
+                [options]="filteredAuditleaders"  
+                formControlName="auditleaders" 
+                optionLabel="firstName"
+                optionValue="_id"
+                [showClear]="true" 
+                placeholder="Select audit leader">
+            </p-dropdown>
+            </div>
+            
+            <!-- Organisation Name -->
+            <div class="field col-12 md:col-6">
+                <label class="font-semibold">Organisation name</label>
+                <input pInputText type="text" formControlName="organisationName" class="w-full"/>
+            </div>
+
+            <!-- Contract Number -->
+            <div class="field col-12 md:col-6">
+                <label class="font-semibold">Contract number</label>
+                <input pInputText type="text" formControlName="contactNumber" class="w-full"/>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="field col-12 md:col-6">
+                <label class="font-semibold">Phone number</label>
+                <input pInputText type="text" formControlName="phoneNumber" class="w-full"/>
+            </div>
+
+            <!-- Website -->
+            <div class="field col-12 md:col-6">
+                <label class="font-semibold">Website</label>
+                <input pInputText type="text" formControlName="website" class="w-full"/>
+            </div>
+
+            <!-- Employees Number -->
+            <div class="field col-12 md:col-6">
+                <label class="font-semibold">Employees number</label>
+                <input pInputText type="number" min="0" formControlName="employeesNumber" class="w-full"/>
+            </div>
+
+            <!-- Employees in Perimeter -->
+            <div class="field col-12 md:col-6">
+                <label class="font-semibold">Employees in the perimeter</label>
+                <input pInputText type="number" min="0" formControlName="employeesInPerimeter" class="w-full"/>
+            </div>
+
+            <!-- Contact Name -->
+            <div class="field col-12 md:col-6">
+                <label class="font-semibold">Contact name</label>
+                <input pInputText type="text" formControlName="contactName" class="w-full"/>
+            </div>
+
+            <!-- Contact Email -->
+            <div class="field col-12 md:col-6">
+                <label class="font-semibold">Contact email</label>
+                <input pInputText type="email" formControlName="contactEmail" class="w-full"/>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-content-end mt-4">
+            <p-button label="Cancel" severity="secondary" (click)="onDismiss()" class="mr-2"></p-button>
+            <p-button label="Save" [disabled]="submitted || !createAuditForm.valid" (click)="handleUpdate()"></p-button>
+        </div>
+    </form>
+</p-dialog>

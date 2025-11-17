@@ -1,0 +1,10 @@
+/* SCSS associé */
+.stepper-scroll-wrapper {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 8px;
+}
+
+::ng-deep .p-steps .p-steps-item {
+  margin-right: 60px; /* ✅ espace entre les steps */
+}

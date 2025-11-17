@@ -1,0 +1,10 @@
+textarea{
+    padding: 8px 5px;
+    border: 1px solid rgb(192, 192, 192);
+    border-radius: 6px;
+}
+
+textarea:focus{
+    border: 1px solid rgb(192, 192, 192);
+    outline: none;
+}

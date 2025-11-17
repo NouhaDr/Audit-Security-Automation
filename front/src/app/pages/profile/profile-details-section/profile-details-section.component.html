@@ -1,0 +1,43 @@
+<ul class="p-0 mx-0 mt-0 mb-4 list-none">
+    <li class="flex align-items-center py-2 border-bottom-1 surface-border">
+        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-gray-100 border-circle mr-3 flex-shrink-0">
+            <i class="pi pi-info text-xl text-gray-500"></i>
+        </div>
+        <span class="text-900 line-height-3"><span class="modal-row-title">Name :</span>{{ currentUser?.firstName }} {{ currentUser?.lastName }}</span>
+    </li>
+    <li class="flex align-items-center py-2 border-bottom-1 surface-border">
+        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-gray-100 border-circle mr-3 flex-shrink-0">
+            <i class="pi pi-envelope text-xl text-gray-500"></i>
+        </div>
+        <span class="text-900 line-height-3"><span class="modal-row-title">Email :</span> {{ currentUser?.email }}</span>
+    </li>
+    <li class="flex align-items-center py-2 border-bottom-1 surface-border">
+        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-gray-100 border-circle mr-3 flex-shrink-0">
+            <i class="pi pi-shield text-xl text-gray-500"></i>
+        </div>
+        <span class="text-900 line-height-3"><span class="modal-row-title">Role :   </span> <span class="font-bold text-400" class="customer-badge" [ngClass]="{
+            'status-qualified': currentUser?.role === 'ADMIN', 
+            'status-new': currentUser?.role === 'CLIENT', 
+            'status-renewal': currentUser?.role === 'AUDITOR',
+            'status-unqualified': currentUser?.role === 'AUDITLEADER'
+        }">{{ currentUser?.role }}</span></span>
+    </li>
+    <li class="flex align-items-center py-2 border-bottom-1 surface-border">
+        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-gray-100 border-circle mr-3 flex-shrink-0">
+            <i class="pi pi-map-marker	text-xl text-gray-500"></i>
+        </div>
+        <span class="text-900 line-height-3"><span class="modal-row-title">Adresse :</span> {{ currentUser?.adresse }}</span>
+    </li>
+    <li class="flex align-items-center py-2 border-bottom-1 surface-border">
+        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-gray-100 border-circle mr-3 flex-shrink-0">
+            <i class="pi pi-phone	text-xl text-gray-500"></i>
+        </div>
+        <span class="text-900 line-height-3"><span class="modal-row-title">Phone :</span> {{ currentUser?.phone }}</span>
+    </li>
+    <li class="flex align-items-center py-2 border-bottom-1 surface-border">
+        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-gray-100 border-circle mr-3 flex-shrink-0">
+            <i class="pi pi-calendar text-xl text-gray-500"></i>
+        </div>
+        <span class="text-900 line-height-3"><span class="modal-row-title">Joined at :</span> {{ currentUser?.createdAt | date : 'dd/MM/yyyy'}}</span>
+    </li>
+</ul>

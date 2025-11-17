@@ -1,0 +1,52 @@
+<p-dialog [header]="dialogHeader" [modal]="true" [(visible)]="editDialogVisible" [style]="{ width: '50rem' }"
+    (onHide)="onDismiss()">
+
+    <div style="display: flex;flex-direction: column">
+        <form [formGroup]="createQuestionForm">
+            <div style="display: flex;flex-direction: column;">
+                <br>
+                <div class="field p-fluid">
+                    <p-dropdown 
+                    [options]="categories" 
+                    formControlName="category"
+                    optionLabel="label" 
+                    optionValue="label" 
+                    [showClear]="true" 
+                    placeholder="Select Category" />
+                    <small
+                        *ngIf="createQuestionForm.get('category').touched && createQuestionForm.get('category').errors?.['required']"
+                        class="p-error">Please select a category
+                    </small>
+                </div>
+                <div class="field p-fluid">
+                    <p-dropdown 
+                    [options]="subCategories" 
+                    formControlName="subcategory"
+                    [showClear]="true" 
+                    placeholder="Select Category" />
+                    <!-- <small
+                        *ngIf="createQuestionForm.get('subcategory').touched && createQuestionForm.get('subcategory').errors?.['required']"
+                        class="p-error">Please select a subcategory
+                    </small> -->
+                </div>
+                <div class="field p-fluid">
+                    <label class="font-semibold w-10rem">Question</label>
+                    <br>
+                    <textarea pInputText class="flex-auto" rows="5" type="text" formControlName="question" multiple ></textarea>
+                    <small
+                    *ngIf="createQuestionForm.get('question').touched && createQuestionForm.get('question').errors?.['required']"
+                    class="p-error">Organisation name is required
+                </small>
+                </div>
+            </div>
+        </form>
+        <div class="field col-12">
+            <div class="flex justify-content-end gap-2">
+                <p-button label="Cancel"  [outlined]="true" severity="danger" (onClick)="onDismiss()" />
+                <p-button label="Save" severity="contrast" (onClick)="handleUpdate()" [loading]="submitted"
+                    [disabled]="submitted || !createQuestionForm.valid" />
+            </div>
+        </div>
+    </div>
+
+</p-dialog>

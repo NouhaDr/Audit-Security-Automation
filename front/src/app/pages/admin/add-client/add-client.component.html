@@ -1,0 +1,91 @@
+<div class="grid p-fluid">
+    <div class="col-12">
+        <div class="card">
+            <h5 class="font-bold">{{ formTitle }}</h5>
+            <form [formGroup]="newUserForm" (ngSubmit)="handleSubmit()">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12">
+                        <label>Select role</label>
+                        <p-dropdown [options]="roles" [showClear]="true" formControlName="role" placeholder="Select a role"/>
+                        <small
+                            *ngIf="newUserForm.get('role').touched && newUserForm.get('role').errors?.['required']"
+                            class="p-error">Role field is required</small>
+                    </div>
+
+                    <div class="col-12">
+                        <h5>Gender</h5>
+                        <div class="grid formgrid">
+                            <div class="col-12 md:col-4">
+                                <div class="field-radiobutton">
+                                    <p-radioButton name="gender" value="Male" formControlName="gender"></p-radioButton>
+                                    <label>Male</label>
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-4">
+                                <div class="field-radiobutton">
+                                    <p-radioButton name="gender" value="Female" formControlName="gender"></p-radioButton>
+                                    <label>Female</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>First name</label>
+                        <input pInputText type="text" formControlName="firstName" />
+                        <small
+                            *ngIf="newUserForm.get('firstName').touched && newUserForm.get('firstName').errors?.['required']"
+                            class="p-error">first name is required</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Last name</label>
+                        <input pInputText type="text" formControlName="lastName" />
+                        <small
+                            *ngIf="newUserForm.get('lastName').touched && newUserForm.get('lastName').errors?.['required']"
+                            class="p-error">Last name is required</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Email</label>
+                        <input pInputText type="text" formControlName="email" />
+                        <small
+                            *ngIf="newUserForm.get('email').touched && newUserForm.get('email').errors?.['required']"
+                            class="p-error">Email is required</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Password</label>
+                        <p-password formControlName="password" promptLabel="Choose a password" weakLabel="Too simple"
+                            mediumLabel="Average complexity" strongLabel="Complex password" [toggleMask]="true" />
+                        <small
+                            *ngIf="newUserForm.get('password').touched && newUserForm.get('password').errors?.['required']"
+                            class="p-error">Password is required</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Phone number</label>
+                        <input pInputTextarea rows="4" formControlName="phone" />
+                        <small
+                            *ngIf="newUserForm.get('phone').touched && newUserForm.get('phone').errors?.['required']"
+                            class="p-error">Phone number is required</small>
+                    </div>
+                    
+                    <div class="field col-12 md:col-6" *ngIf="newUserForm.get('role')?.value === 'CLIENT'">
+                        <label>Company</label>
+                        <input pInputText type="text" formControlName="company" />
+                        <small
+                            *ngIf="newUserForm.get('company').touched && newUserForm.get('company').errors?.['required']"
+                            class="p-error">Company is required</small>
+                    </div>
+                    
+                    <div class="field col-12">
+                        <label>Adresse</label>
+                        <input pInputText type="text" formControlName="adresse" />
+                        <!-- <small *ngIf="newClientForm.get('adresse').touched && newClientForm.get('adresse').errors?.['required']" class="p-error">Adresse is required</small> -->
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <p-button label="Add" severity="contrast" [loading]="submitted" [disabled]="!newUserForm.valid"
+                        (onClick)="handleSubmit()"></p-button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

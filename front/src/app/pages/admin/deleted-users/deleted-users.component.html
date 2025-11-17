@@ -1,0 +1,88 @@
+<div class="grid">
+	<div class="col-12">
+	  <div class="card">
+		<h5 class="font-bold">Deleted users</h5>
+		<p-table #dt1 [value]="filteredUsers" dataKey="_id" [rows]="10" [loading]="loading" 
+				 [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true"
+				 [globalFilterFields]="['name','country.name','representative.name','status']"
+				 responsiveLayout="scroll">
+		  
+		  <ng-template pTemplate="caption">
+			<div class="flex justify-content-end flex-column sm:flex-row">
+			  <span class="p-input-icon-left mb-2">
+				<i class="pi pi-search"></i>
+				<input pInputText type="text" #filter (input)="handleSearch($event)" placeholder="Search user" class="w-full"/>
+			  </span>
+			  <p-button severity="contrast" label="Reload" [loading]="loading" (onClick)="getAllDeleted()" class="mx-2"></p-button>
+			</div>
+		  </ng-template>
+  
+		  <ng-template pTemplate="header">
+			<tr>
+			  <th style="min-width: 12rem">Full name</th>
+			  <th style="min-width: 14rem">Email</th>
+			  <th style="min-width: 10rem">Role</th>
+			  <th style="min-width: 10rem">Creation date</th>
+			  <th style="min-width: 10rem">Deleted at</th>
+			  <th style="min-width: 10rem">Actions</th>
+			</tr>
+		  </ng-template>
+  
+		  <ng-template pTemplate="body" let-user>
+			<tr>
+			  <td>
+				<img [alt]="user.firstName +' ' + user.lastName" [src]="imagesUrl+'/'+user?.image" width="34" style="vertical-align: middle"/>
+				<span class="image-text ml-2">{{ user.firstName }} {{ user.lastName }}</span>
+			  </td>
+			  <td><span class="image-text ml-2">{{ user.email }}</span></td>
+			  <td>
+				<span class="customer-badge" 
+					  [ngClass]="{
+						'status-qualified': user.role === 'ADMIN', 
+						'status-new': user.role === 'CLIENT', 
+						'status-renewal': user.role === 'AUDITOR',
+						'status-unqualified': user.role === 'AUDITLEADER'
+					  }">
+				  {{ user.role }}
+				</span>
+			  </td>
+			  <td>{{ user.createdAt | date: 'dd/MM/yyyy' }}</td>
+			  <td>{{ user.updatedAt | date: 'dd/MM/yyyy' }}</td>
+			  <td>
+				<div style="display: flex; justify-content: center; gap: 5px;">
+				  <p-button severity="info" pRipple icon="pi pi-eye" [rounded]="true" [outlined]="true" (click)="showDetails(user)" style="border-radius: 50%;"></p-button>
+				  <p-button icon="pi pi-refresh" severity="success" [rounded]="true" [outlined]="true" 
+							[loading]="user._id === deleteLoading" [disabled]="user._id === deleteLoading"
+							key="delete" (click)="confirmationDialog.show(); selectUserToDelete(user._id)">
+				  </p-button>
+				</div>
+			  </td>
+			</tr>
+		  </ng-template>
+  
+		  <ng-template pTemplate="emptymessage">
+			<tr><td colspan="8">No deleted users found.</td></tr>
+		  </ng-template>
+  
+		  <ng-template pTemplate="loadingbody">
+			<tr><td colspan="8">Loading deleted users. Please wait.</td></tr>
+		  </ng-template>
+  
+		</p-table>
+	  </div>
+	</div>
+  </div>
+  
+  <app-custom-confirm-dialog 
+	#confirmationDialog
+	[key]="'delete'"
+	(onAccept)="handleUserDelete()"
+	(onReject)="clearLoading()">
+  </app-custom-confirm-dialog>
+  
+  <app-user-infos-dialog 
+	[selectedUser]="selectedUser" 
+	[visible]="dialogVisible" 
+	(hide)="dialogVisible=false">
+  </app-user-infos-dialog>
+  

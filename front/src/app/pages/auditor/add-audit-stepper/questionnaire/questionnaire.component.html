@@ -1,0 +1,21 @@
+<div class="card">
+    <h5 class="font-bold">Questionnaire</h5>
+    <p-divider/>
+    <ul class="list-none p-0 m-0">
+        <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between px-3 py-1" *ngFor="let q of questions">
+            <div>
+                <div class="mt-1 text-400">{{ q.question?.category }} <span *ngIf="q.question?.subcategory">- {{ q.question?.subcategory }}</span></div>
+                <span class="text-900 font-medium mr-2 mb-1 md:mb-0">{{ q.question?.question }}</span>
+            </div>
+            <div class="mt-2 md:mt-0 flex align-items-center gap-2">
+                <p-button icon="pi pi-check" severity="success" [rounded]="true" [text]="q.response != 'true'" (onClick)="handleQuestionCheck(q, true)"></p-button>
+                <p-button icon="pi pi-times" severity="danger" [rounded]="true" [text]="q.response != 'false'"  (onClick)="handleQuestionCheck(q, false)"></p-button>
+            </div>
+        </li> 
+        <p-divider/>
+    </ul>
+    <div class="justify-content-end flex align-items-center gap-2">
+        <p-button label="Back"  (onClick)="goBack()"></p-button>
+        <p-button label="Next" disabled  (onClick)="goNext()"></p-button>
+    </div>
+</div>

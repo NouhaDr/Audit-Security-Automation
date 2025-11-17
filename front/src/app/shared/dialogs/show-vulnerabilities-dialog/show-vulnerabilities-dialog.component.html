@@ -1,0 +1,59 @@
+<p-dialog  
+  header="Vulnerabilities"
+  [(visible)]="visible"
+  [modal]="true"
+  (onHide)="onClose()"
+  [closable]="true"
+  [style]="{ width: '60rem' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  class="p-dialog-custom"
+>
+  <div class="p-fluid">
+
+    <ng-container *ngIf="vulnerabilities?.length > 0; else noVulns">
+      <div *ngFor="let vuln of vulnerabilities" class="surface-card shadow-2 border-round p-4 mb-4">
+        
+        <div class="flex justify-content-between align-items-center mb-3">
+          <div class="font-bold text-lg text-primary">
+            <a 
+                *ngIf="vuln.cve" 
+                [href]="'https://nvd.nist.gov/vuln/detail/' + vuln.cve" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="text-black hover:underline"
+                >
+                {{ vuln.cve }}
+            </a>
+            <span *ngIf="!vuln.cve">Unknown CVE</span>
+          </div>          
+          <span 
+            class="badge text-white text-sm px-3 py-1 border-round"
+            [ngClass]="{
+              'bg-green-700': vuln.cvss < 4,
+              'bg-orange-500': vuln.cvss >= 4 && vuln.cvss < 7,
+              'bg-orange-600': vuln.cvss >= 7 && vuln.cvss < 9,
+              'bg-red-700': vuln.cvss >= 9
+            }">
+            CVSS: {{ vuln.cvss }}
+          </span>
+        </div>
+
+        <div class="text-700 text-sm" style="line-height: 1.5;">
+          {{ vuln.description || 'No description available.' }}
+        </div>
+
+      </div>
+    </ng-container>
+
+    <ng-template #noVulns>
+      <div class="text-center text-600 mt-4">
+        ✅ No vulnerabilities detected.
+      </div>
+    </ng-template>
+
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Close" (onClick)="onClose()" severity="danger" [outlined]="true" class="p-button-outlined" />
+  </ng-template>
+</p-dialog>

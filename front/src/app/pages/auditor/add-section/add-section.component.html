@@ -1,0 +1,84 @@
+<div class="card surface-card shadow-2 border-round-xl p-4">
+    <p-table [value]="filteredAudits" 
+             [paginator]="true" 
+             [rows]="5" 
+             [responsiveLayout]="'scroll'"
+             [tableStyle]="{ 'min-width': '70rem' }"
+             class="p-datatable-gridlines p-datatable-striped">
+
+        <!-- 📌 En-tête du tableau -->
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-900 text-md font-semibold">Organisation</th>
+                <th class="text-900 text-md font-semibold">Client</th>
+                <th class="text-900 text-md font-semibold">Auditors</th>
+                <th class="text-900 text-md font-semibold text-center">Actions</th>
+            </tr>
+        </ng-template>
+
+        <!-- 📌 Corps du tableau -->
+        <ng-template pTemplate="body" let-audit>
+            <tr class="hover:bg-gray-100 transition-all">
+                <td>
+                    <div class="flex align-items-center gap-2">
+                        <i class="pi pi-building text-primary text-lg"></i>
+                        <span class="font-medium text-900">{{ audit.organisationName }}</span>
+                    </div>
+                </td>
+
+                <!-- 👤 Client -->
+                <td class="text-700">
+                    {{ audit.client?.firstName }} {{ audit.client?.lastName }}
+                </td>
+
+                <!-- 🧑‍💼 Auditors -->
+                <td class="text-700">
+                    <span *ngIf="audit.auditors?.length > 0; else noAuditor">
+                        <ng-container *ngFor="let auditor of audit.auditors; let isLast = last">
+                            {{ auditor.firstName }} {{ auditor.lastName }}<span *ngIf="!isLast">, </span>
+                        </ng-container>
+                    </span>
+                    <ng-template #noAuditor>
+                        <span class="text-gray-400 italic">No auditors assigned</span>
+                    </ng-template>
+                </td>
+
+                <!-- 🔧 Actions -->
+                <td>
+                    <div class="flex justify-content-center gap-2">
+                        <p-button icon="pi pi-cog" 
+                                   severity="contrast"
+                                   [rounded]="true" 
+                                   [outlined]="true"
+                                   size="small"
+                                   (onClick)="openAddSectionDialog(audit)">
+                        </p-button>
+
+                        <p-button icon="pi pi-eye" 
+                                   severity="info"
+                                   [rounded]="true" 
+                                   [outlined]="true"
+                                   size="small"
+                                   (onClick)="goToGererSections(audit._id)">
+                        </p-button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <!-- 🚨 Message en cas d'absence de données -->
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="4" class="text-center text-gray-400 p-4">Aucun audit trouvé.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+</div>
+
+
+<app-add-section-dialog 
+  [(displayDialog)]="displayDialog" 
+  [selectedAuditId]="selectedAudit"
+  (dialogClosed)="displayDialog = false">
+</app-add-section-dialog>

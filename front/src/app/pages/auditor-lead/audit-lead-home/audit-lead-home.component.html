@@ -1,0 +1,91 @@
+<div class="grid">
+  <div class="col-12 grid">
+
+    <!-- All Audits -->
+    <div class="col-12 lg:col-6 xl:col-4">
+      <div class="card surface-card shadow-2 border-round-xl p-4">
+        <div class="flex justify-content-between align-items-center mb-3 pb-2 border-bottom-1 surface-border">
+          <h5 class="text-md font-bold text-500 m-0">All Audits</h5>
+        </div>
+        <div class="flex justify-content-between align-items-center">
+          <div class="text-3xl font-bold">{{ audits.length }}</div>
+          <div class="flex align-items-center justify-content-center bg-[#fdf0d5] border-round"
+          [ngStyle]="{ width: '2.5rem', height: '2.5rem' }">
+            <i class="pi pi-folder text-[#003049] text-xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Audits -->
+    <div class="col-12 lg:col-6 xl:col-4">
+      <div class="card surface-card shadow-2 border-round-xl p-4">
+        <div class="flex justify-content-between align-items-center mb-3 pb-2 border-bottom-1 surface-border">
+          <h5 class="text-md font-bold text-500 m-0">Pending Audits</h5>
+        </div>
+        <div class="flex justify-content-between align-items-center">
+          <div class="text-3xl font-bold">{{ pendingAudits.length }}</div>
+          <div class="flex align-items-center justify-content-center bg-[#fdf0d5] border-round"
+          [ngStyle]="{ width: '2.5rem', height: '2.5rem' }">
+            <i class="pi pi-folder-open text-[#003049] text-xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Finished Audits -->
+    <div class="col-12 lg:col-6 xl:col-4">
+      <div class="card surface-card shadow-2 border-round-xl p-4">
+        <div class="flex justify-content-between align-items-center mb-3 pb-2 border-bottom-1 surface-border">
+          <h5 class="text-md font-bold text-500 m-0">Finished Audits</h5>
+        </div>
+        <div class="flex justify-content-between align-items-center">
+          <div class="text-3xl font-bold">{{ finishedAudits.length }}</div>
+          <div class="flex align-items-center justify-content-center bg-[#fdf0d5] border-round"
+          [ngStyle]="{ width: '2.5rem', height: '2.5rem' }">
+            <i class="pi pi-check-circle text-[#003049] text-xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+
+  <div class="col-12 grid">
+
+     <!-- Audits with Feedbacks -->
+     <div class="col-12 xl:col-6">
+      <div class="card surface-card shadow-2 border-round-xl p-4">
+        <div class="flex justify-content-between align-items-center mb-4 pb-2 border-bottom-1 surface-border">
+          <h5 class="text-2xl font-bold m-0">Feedbacks</h5>
+        </div>
+
+        <!-- Liste des audits avec feedback -->
+        <ul class="list-none p-0 m-0">
+          <li *ngFor="let audit of auditsWithFeedback" 
+              class="flex flex-column mb-4 p-4 border-round-xl bg-gray-50 hover:shadow-2 transition-all duration-200">
+            <div class="flex align-items-center gap-2 font-medium text-lg">
+              <i class="pi pi-building text-xl"></i>
+              <span>{{ audit.organisationName }}</span>
+            </div>
+            <div class="mt-2">
+              <strong>Feedback:</strong>
+              <p>{{ audit.feedback }}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+     </div>
+      <!-- Doughnut Chart Harmonisé -->
+      <div class="col-12 xl:col-6">
+        <div class="card surface-card shadow-2 border-round-xl p-4">
+          <div class="flex justify-content-between align-items-center mb-4 pb-2 border-bottom-1 surface-border">
+            <h5 class="text-2xl font-bold m-0">Audits Overview</h5>
+          </div>
+          <p-chart type="doughnut" [data]="auditPieData" [options]="auditPieOptions"></p-chart>
+        </div>
+      </div>
+  </div>
+</div>

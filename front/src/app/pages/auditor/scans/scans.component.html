@@ -1,0 +1,152 @@
+<div class="card p-fluid">
+    <div class="text-900 font-bold text-xl mb-4">Scan Configuration</div>
+    
+    <!-- Audit Selection -->
+    <div class="field mb-5">
+        <label for="auditSelect" class="block text-600 font-medium mb-2">Select an audit</label>
+        <p-dropdown
+            id="auditSelect"
+            [options]="audits"
+            [(ngModel)]="selectedAudit"
+            optionLabel="organisationName"
+            [filter]="true"
+            [showClear]="true"
+            placeholder="Search for an audit..."
+            (onChange)="onAuditSelected()"
+            class="w-full"
+            appendTo="body"
+            [style]="{'borderRadius': '12px'}"
+        >
+            <ng-template let-audit pTemplate="item">
+                <div class="flex align-items-center p-2">
+                    <p-avatarGroup *ngIf="audit.auditors?.length > 0" class="mr-3">
+                        <p-avatar 
+                            *ngFor="let a of audit.auditors" 
+                            [image]="imagesUrl + '/' + a.image"
+                            size="small" 
+                            shape="circle"
+                            [pTooltip]="a.firstName + ' ' + a.lastName"
+                            tooltipPosition="top"
+                        />
+                    </p-avatarGroup>
+                    <div>
+                        <div class="font-bold">{{ audit.organisationName }}</div>
+                        <small class="text-500">{{ audit.contactName }} • {{ audit.contactEmail }}</small>
+                    </div>
+                </div>
+            </ng-template>
+        </p-dropdown>
+    </div>
+
+    <!-- Configuration Section -->
+    <div class="grid formgrid">
+        <!-- Target IP -->
+        <div class="col-12 md:col-6 field mb-4">
+            <label for="scanType" class="block text-600 font-medium mb-2">Target IP Address</label>
+            <input 
+                
+                id="ip" 
+                type="text" 
+                [(ngModel)]="scanForm.ip" 
+                placeholder="Your target ip address..." 
+                class="w-full"
+                [style]="{'borderRadius': '12px', 'padding': '0.6rem'}"
+            />
+        </div>
+
+        <!-- Scan Type -->
+        <div class="col-12 md:col-6 field mb-4">
+            <label for="scanType" class="block text-600 font-medium mb-2">Scan type</label>
+            <p-dropdown
+                id="scanType"
+                [options]="scanTypes" 
+                [(ngModel)]="scanForm.typeScanId"
+                optionLabel="label"
+                [optionValue]="'value'"         
+                placeholder="Select scan type..."
+                class="w-full"
+                [style]="{'borderRadius': '12px'}"
+            ></p-dropdown>
+        </div>
+  
+  
+    </div>
+
+    <!-- Action Button -->
+    <div class="flex justify-content-end mt-5">
+        <p-button 
+            label="Start Scan"
+            icon="pi pi-play"
+            (click)="onScanLaunch()"
+            [disabled]="!selectedAudit || !scanForm.ip || !scanForm.typeScanId"
+            severity="contrast"
+            [style]="{'borderRadius': '12px', 'padding': '0.75rem 1.25rem'}"
+        ></p-button>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="text-900 font-bold text-lg mb-3">Scan List for This Audit</div>
+    <div *ngIf="scans.length === 0" class="text-500">No scan is running.</div>
+    <ul *ngIf="scans.length > 0" class="list-none p-0">
+    
+      <li *ngFor="let scan of scans" class="mb-3">
+        <div class="flex justify-content-between align-items-center border-bottom-1 border-300 pb-2">
+            <div>
+                <div class="font-bold text-900">IP : {{ scan.ip }}</div>
+                <div class="text-600 text-sm">Type : {{ scan.typeScan }} • Début : {{ scan.dateDebut | date:'short' }}</div>
+            </div>
+          
+
+
+            <span
+                class="badge flex align-items-center gap-2 px-3 py-1 border-round-lg font-medium"
+                [ngClass]="{
+                    'bg-purple-100 text-purple-800 border-purple-300': scan.status === 'requested',
+                    'bg-blue-100 text-blue-800 border-blue-300': scan.status === 'queued',
+                    'bg-yellow-100 text-yellow-800 border-yellow-300': scan.status === 'running' || scan.status === 'in_progress',
+                    'bg-green-100 text-green-800 border-green-300': scan.status === 'done',
+                    'bg-red-100 text-red-800 border-red-300': scan.status === 'failed' || scan.status === 'canceled' || scan.status === 'interrupted' || scan.status === 'stopped'
+                }"
+                style="min-width: 130px"
+                >
+                <!-- Icônes selon le statut -->
+                <i *ngIf="scan.status === 'requested'" class="pi pi-info-circle text-sm"></i>
+                <i *ngIf="scan.status === 'queued'" class="pi pi-clock text-sm"></i>
+                <i *ngIf="scan.status === 'running' || scan.status === 'in_progress'" class="pi pi-spinner pi-spin text-sm"></i>
+                <i *ngIf="scan.status === 'done'" class="pi pi-check-circle text-sm"></i>
+                <i *ngIf="['failed', 'canceled', 'interrupted', 'stopped'].includes(scan.status)" class="pi pi-times-circle text-sm"></i>
+
+                <!-- Libellé capitalisé -->
+                <span class="text-sm text-capitalize">{{ scan.status }}</span>
+            </span>
+
+
+
+            
+            <!-- Bouton Vulnerabilities -->
+            <p-button 
+                icon="pi pi-shield" 
+                label="Vulnerabilities" 
+                (click)="showVulnerabilities(scan)"
+                [styleClass]="
+                    'p-button-sm ' +
+                    (selectedScanId === scan._id && dialogVisible 
+                    ? 'p-button-help' 
+                    : 'p-button-outlined p-button-help')"
+                pTooltip="View scan vulnerabilities"
+                tooltipPosition="top">
+            </p-button>
+
+
+        </div>
+      </li>
+    </ul>
+  </div>
+
+<app-show-vulnerabilities-dialog 
+  [visible]="dialogVisible"
+  [vulnerabilities]="selectedVulns"
+  (visibleChange)="dialogVisible = $event"
+  (onHide)="onDialogHide()">
+</app-show-vulnerabilities-dialog>

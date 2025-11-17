@@ -1,0 +1,34 @@
+<p-dialog 
+	header="Upload a file" 
+	[modal]="true"
+	[(visible)]="visible" 
+	[style]="{ width: '50rem' }" 
+	(onHide)="onDismiss()"
+	[breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+ 
+    <div class="mt-3 col-12 upload-container" (click)="fileInput.click()" *ngIf="!selectedFile">
+        <span class="text-blue-700">Click to upload a file</span>
+        <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;" />
+    </div>
+  
+    <div *ngIf="selectedFile" class="bg-gray-100 py-2 mt-3" style="border-radius: 12px;overflow: hidden;">
+        <ul class="flex justify-content-between list-none align-items-center px-3">
+            <li>
+                <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-gray-100 border-circle mr-3 flex-shrink-0">
+                    <i class="pi pi-file text-xl text-gray-500"></i>
+                </div>
+            </li>
+            <li>{{ selectedFile.name }}</li>
+            <li>{{ selectedFile.size/1024 }} Kb</li>
+            <li>
+                <p-button icon="pi pi-times" [text]="true" severity="danger" (click)="selectedFile = null">
+                </p-button>
+            </li>
+
+        </ul>
+    </div>
+    <div class="flex justify-content-end mt-4">
+        <p-button label="Cancel" [text]="true" severity="secondary" (onClick)="onDismiss()" />
+        <p-button label="Upload" icon="pi pi-upload" [outlined]="true" severity="primary" (onClick)="handleUpload()" [loading]="submitted" [disabled]="submitted && !selectedFile"/>
+    </div>
+</p-dialog>

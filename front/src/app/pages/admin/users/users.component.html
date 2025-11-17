@@ -1,0 +1,158 @@
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+			<h5>All users</h5>
+			<p-table #dt1 [value]="filteredUsers" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-end flex-column sm:flex-row">
+						<!-- <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt1)"></button> -->
+						 <div></div>
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" (input)="handleSearch($event)" placeholder="Search Keyword" class="w-full"/>
+						</span>
+						<p-button severity="contrast" label="Reload" [loading]="loading" (onClick)="getAllUsers()" class="mx-2"></p-button>
+					</div>
+				</ng-template>
+				<!-- table header -->
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 12rem">
+							<div class="flex justify-content-between align-items-center">
+								Name
+							</div>
+						</th>
+                        <th style="min-width: 8rem">
+                           <div class="flex justify-content-between align-items-center">
+                               Role
+                           </div>
+                       </th>
+						 <th style="min-width: 14rem">
+							<div class="flex justify-content-between align-items-center">
+								Email
+							</div>
+						</th>
+						<th style="min-width: 10rem">
+							<div class="flex justify-content-between align-items-center">
+                                Adresse
+							</div>
+						</th>
+						<th style="min-width: 10rem">
+							<div class="flex justify-content-between align-items-center">
+								Creation date
+							</div>
+						</th>
+						<th style="min-width: 10rem">
+							<div class="flex justify-content-between align-items-center">
+								Actions
+							</div>
+						</th>
+					</tr>
+				</ng-template>
+				<!-- table body -->
+				<ng-template pTemplate="body" let-user>
+					<tr>
+						<td>
+              <div>
+								<img [src]="imagesUrl+'/'+user.image" width="34" style="vertical-align: middle;border-radius: 100px;"/>
+								<span class="image-text ml-2">{{user?.firstName}} {{user?.lastName}}</span>
+							</div>
+						</td>
+					
+						 <td>
+							<span 
+								class="customer-badge" 
+								[ngClass]="{
+									'status-qualified': user?.role === 'ADMIN', 
+									'status-new': user?.role === 'CLIENT', 
+									'status-renewal': user?.role === 'AUDITOR',
+									'status-unqualified': user?.role === 'AUDITLEADER'
+								}">
+								{{user?.role}}
+							</span>
+						</td>
+						 <td>
+							<span class="image-text ml-2">{{user?.email}}</span>
+						</td>
+						<td>
+							{{user?.adresse}}
+						</td>
+						<td>
+							{{user?.createdAt | date: 'dd/MM/yyyy'}}
+						</td>
+						<td>
+							<div style="display: flex; gap: 5px;">
+  
+								<!-- Bouton VIEW -->
+								<p-button
+									icon="pi pi-eye"
+									severity="info"
+									[rounded]="true"
+									[outlined]="true"
+									(onClick)="showDetails(user)"
+									[ngStyle]="{'border-color': '#669bbc', 'color': '#669bbc'}"
+								></p-button>
+							
+								<!-- Bouton EDIT -->
+								<p-button
+									icon="pi pi-pencil"
+									severity="success"
+									[rounded]="true"
+									[outlined]="true"
+									(onClick)="showEditDialog(user)"
+									[ngStyle]="{'border-color': '#003049', 'color': '#003049'}"
+								></p-button>
+							
+								<!-- Bouton DELETE -->
+								<p-button
+									icon="pi pi-trash"
+									severity="danger"
+									[rounded]="true"
+									[outlined]="true"
+									[loading]="user._id === deleteUserLoading"
+									[disabled]="user._id === deleteUserLoading"
+									(onClick)="deleteDialog.show(); selectUserToDelete(user._id)"
+									[ngStyle]="{'border-color': '#c1121f', 'color': '#c1121f'}"
+								></p-button>
+							
+							</div>
+							
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="8">No users found.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="8">Loading users. Please wait.</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
+
+	</div>
+</div>
+
+
+<app-custom-confirm-dialog 
+	#deleteDialog
+	[key]="'delete'"
+	(onAccept)="handleUserDelete()"
+	(onReject)="clearLoading()"
+></app-custom-confirm-dialog>
+
+<app-user-infos-dialog 
+	[selectedUser]="selectedUser" 
+	[visible]="dialogVisible" 
+	(hide)="dialogVisible=false"
+></app-user-infos-dialog>
+
+<app-edit-user-dialog 
+	[selectedUser]="selectedUser" 
+	(callback)="handleUserUpdate($event)"
+	[editDialogVisible]="editDialogVisible"
+	(dismiss)="editDialogVisible=false"
+></app-edit-user-dialog>

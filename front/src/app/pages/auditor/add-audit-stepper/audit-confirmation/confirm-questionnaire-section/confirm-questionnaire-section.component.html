@@ -1,0 +1,17 @@
+<ul class="py-2 mx-0 mt-0 list-none grey-on-hover" *ngFor="let q of questionnaire">
+    <li class="flex align-items-center surface-border">
+        <div class="w-3rem h-3rem flex align-items-center justify-content-center border-circle mr-3 flex-shrink-0"
+            [ngClass]="{
+                'bg-green-100': q.response === 'true',
+                'bg-red-100': q.response === 'false'}">
+            <i class="text-xl pi" style="font-size: 0.5rem" [ngClass]="{
+                'pi-check text-green-500': q.response === 'true',
+                'pi-times text-red-500': q.response === 'false'}"></i>
+        </div>
+        <div style="display: flex;flex-direction: column;">
+            <span class="text-500 line-height-3">{{ q?.question?.category }} <span *ngIf="q?.question?.subcategory">- {{ q?.question?.subcategory }}</span></span>
+            <span class="text-900 font-bold line-height-3">{{ q?.question?.question }}</span>
+        </div>
+        <br>
+    </li>
+</ul>

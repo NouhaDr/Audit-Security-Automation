@@ -1,0 +1,60 @@
+<p-dialog header="User information" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }" (onHide)="handleHide()"
+	[breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+	<div style="display: flex;justify-content: center;">
+		<img [alt]="selectedUser?.firstName +' ' + selectedUser?.lastName" [src]="imagesUrl+'/'+selectedUser?.image"
+			width="120" style="vertical-align: middle;border-radius: 100px;aspect-ratio: 1/1;object-fit: cover;" />
+	</div>
+	<ul class="p-0 mx-0 mt-0 mb-4 list-none">
+		<li class="flex align-items-center py-2 border-bottom-1 surface-border">
+			<div
+				class="w-3rem h-3rem flex align-items-center justify-content-center bg-gray-100 border-circle mr-3 flex-shrink-0">
+				<i class="pi pi-info text-xl text-gray-500"></i>
+			</div>
+			<span class="text-900 line-height-3"><span class="modal-row-title">Name :</span>{{ selectedUser?.firstName
+				}} {{ selectedUser?.lastName }}</span>
+		</li>
+		<li class="flex align-items-center py-2 border-bottom-1 surface-border">
+			<div
+				class="w-3rem h-3rem flex align-items-center justify-content-center bg-gray-100 border-circle mr-3 flex-shrink-0">
+				<i class="pi pi-envelope text-xl text-gray-500"></i>
+			</div>
+			<span class="text-900 line-height-3"><span class="modal-row-title">Email :</span> {{ selectedUser?.email
+				}}</span>
+		</li>
+		<li class="flex align-items-center py-2 border-bottom-1 surface-border">
+			<div
+				class="w-3rem h-3rem flex align-items-center justify-content-center bg-gray-100 border-circle mr-3 flex-shrink-0">
+				<i class="pi pi-shield text-xl text-gray-500"></i>
+			</div>
+			<span class="text-900 line-height-3 font-bold">Role : <span class="customer-badge text-900 line-height-3 font-bold" [ngClass]="{
+				'status-qualified': selectedUser?.role === 'ADMIN', 
+				'status-new': selectedUser?.role === 'CLIENT', 
+				'status-renewal': selectedUser?.role === 'AUDITOR'
+			}">{{ selectedUser?.role }}</span></span>
+		</li>
+		<li class="flex align-items-center py-2 border-bottom-1 surface-border">
+			<div
+				class="w-3rem h-3rem flex align-items-center justify-content-center bg-gray-100 border-circle mr-3 flex-shrink-0">
+				<i class="pi pi-map-marker	text-xl text-gray-500"></i>
+			</div>
+			<span class="text-900 line-height-3"><span class="modal-row-title">Adresse :</span> {{ selectedUser?.adresse
+				}}</span>
+		</li>
+		<li class="flex align-items-center py-2 border-bottom-1 surface-border">
+			<div
+				class="w-3rem h-3rem flex align-items-center justify-content-center bg-gray-100 border-circle mr-3 flex-shrink-0">
+				<i class="pi pi-phone	text-xl text-gray-500"></i>
+			</div>
+			<span class="text-900 line-height-3"><span class="modal-row-title">Phone :</span> {{ selectedUser?.phone
+				}}</span>
+		</li>
+		<li class="flex align-items-center py-2 surface-border">
+			<div
+				class="w-3rem h-3rem flex align-items-center justify-content-center bg-gray-100 border-circle mr-3 flex-shrink-0">
+				<i class="pi pi-calendar text-xl text-gray-500"></i>
+			</div>
+			<span class="text-900 line-height-3"><span class="modal-row-title">Joined at :</span> {{
+				selectedUser?.createdAt | date : 'dd/MM/yyyy'}}</span>
+		</li>
+	</ul>
+</p-dialog>

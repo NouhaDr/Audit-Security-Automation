@@ -1,0 +1,114 @@
+<p-dialog 
+  header="Add Section"
+  [(visible)]="displayDialog"
+  [modal]="true"
+  [style]="{ width: '50rem', height: 'auto' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  class="border-round-xl p-4"
+>
+  <form [formGroup]="sectionForm" (ngSubmit)="submitForm()" class="p-fluid">
+
+    <!-- 🏷️ Section Name -->
+    <div class="field mb-4">
+      <label for="sectionName" class="text-900 font-semibold mb-2 block">Section Name</label>
+      <input 
+        id="sectionName" 
+        type="text" 
+        formControlName="nom" 
+        class="p-inputtext w-full" 
+        placeholder="Enter section name"
+      >
+      <small *ngIf="sectionForm.get('nom')?.invalid && sectionForm.get('nom')?.touched" class="p-error">
+        Section name is required.
+      </small>
+    </div>
+
+    <!-- ➕ Add Dynamic Field -->
+    <div class="field mb-4">
+      <label class="text-900 font-semibold mb-2 block">Field Name & Type</label>
+      <div class="flex flex-column md:flex-row align-items-center gap-3">
+
+        <!-- Field Label -->
+        <input 
+          #labelInput 
+          type="text" 
+          placeholder="Field Label" 
+          class="p-inputtext flex-1"
+        >
+
+        <!-- Field Type -->
+        <p-dropdown 
+          #typeInput 
+          [options]="fieldTypes" 
+          placeholder="Select Type"
+          optionLabel="label"
+          optionValue="value"
+          class="flex-1"
+        >
+        </p-dropdown>
+
+        <!-- Add Button -->
+        <p-button 
+          icon="pi pi-plus" 
+          label="Add" 
+          severity="contrast"
+          (onClick)="addChamp(labelInput.value, typeInput.value)"
+        >
+        </p-button>
+      </div>
+    </div>
+
+    <p-divider></p-divider>
+
+    <!-- 📋 Dynamic Fields Editable List -->
+    <div class="flex flex-column gap-3 mb-4">
+      <div *ngFor="let champ of dynamicChamps; let i = index" class="flex items-center gap-3">
+
+        <!-- Editable Field Label -->
+        <input 
+          type="text"
+          [(ngModel)]="champ.label"
+          [ngModelOptions]="{standalone: true}" 
+          class="p-inputtext flex-1 border-1 surface-0 border-round-lg"
+          placeholder="Field Label"
+        >
+
+        <!-- Editable Field Type -->
+        <p-dropdown 
+          [(ngModel)]="champ.type"
+          [options]="fieldTypes"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select Type"
+          [ngModelOptions]="{standalone: true}"
+          class="flex-1"
+        >
+        </p-dropdown>
+
+        <!-- Trash Button -->
+        <p-button 
+          icon="pi pi-trash"
+          severity="danger"
+          [rounded]="true"
+          (onClick)="removeChamp(i)"
+          style="width: 2.5rem; height: 2.5rem; min-width: 2.5rem; color: white; margin-left: auto;"
+        >
+        </p-button>
+
+      </div>
+    </div>
+
+    <!-- ✅ Update Section Button -->
+    <div class="flex justify-content-end">
+      <p-button 
+        label="Add Section"
+        type="submit"
+        severity="contrast"
+      >
+      </p-button>
+    </div>
+
+  </form>
+</p-dialog>
+
+<p-toast></p-toast>

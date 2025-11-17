@@ -1,0 +1,382 @@
+<div class="card">
+    <div class="stepper-scroll-wrapper">
+      <p-steps 
+        *ngIf="stepItems.length > 0"
+        [model]="stepItems" 
+        [readonly]="false" 
+        [(activeIndex)]="activeIndex" 
+        (onChange)="onStepChange($event)">
+      </p-steps>
+    </div>
+  </div>
+  
+  
+<div class="card" *ngIf="selectedSection?.nom === 'Contact'"> 
+  <h4 class="mb-5 font-bold">Audit Contact</h4>
+  <form *ngIf="createAuditForm" [formGroup]="createAuditForm"> 
+      <div class="p-fluid p-formgrid">
+          <div class="grid">
+              <div class="field col-12">
+                  <label>Client</label>
+                  <input pInputText type="text" formControlName="client" /> 
+              </div>  
+              <div class="field col-12">
+                  <label>Auditors</label>
+                  <p-chips formControlName="auditors"/> 
+              </div>    
+              <div class="field col-12 md:col-12">
+                  <label>Organisation name</label>
+                  <input pInputText type="text" formControlName="organisationName"/>
+              </div>
+              <div class="col-12 md:col-6">
+                  <label>Contract number</label>
+                  <input pInputText type="text" formControlName="contactNumber"/>
+              </div>
+              <div class="col-12 md:col-6">
+                  <label>Phone number</label>
+                  <input pInputText type="text" formControlName="phoneNumber"/>
+              </div>                  
+              <div class="field col-12">
+                  <label>Website</label>
+                  <input pInputText type="text" formControlName="website"/>
+              </div>
+              <div class="field col-12 md:col-6">
+                  <label>Employees number</label>
+                  <input pInputText type="number" min="0" formControlName="employeesNumber"/>
+              </div>
+              <div class="field col-12 md:col-6">
+                  <label>Employees number in the perimeter</label>
+                  <input pInputText type="number" min="0" formControlName="employeesInPerimeter"/>
+              </div>
+          </div>
+          <br>
+          <div class="grid">
+              <div class="field col-12 md:col-6">
+                  <label>Contact name</label>
+                  <input pInputText type="text" formControlName="contactName"/>
+              </div>
+              <div class="field col-12 md:col-6">
+                  <label>Contact email</label>
+                  <input pInputText type="text" formControlName="contactEmail"/>
+              </div>
+          </div>
+      </div>
+  </form>
+</div>
+
+<!-- Affichage du questionnaire si la section sélectionnée est "Questionnaire" -->
+<div class="card" *ngIf="selectedSection?.nom === 'Questionnaire'">
+    <h5 class="font-bold">Questionnaire</h5>
+    <p-divider/>
+
+    <ul class="list-none p-0 m-0">
+        <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between px-3 py-1" *ngFor="let q of questions">
+            <div>
+                <div class="mt-1 text-400">{{ q.question?.category }} 
+                    <span *ngIf="q.question?.subcategory">- {{ q.question?.subcategory }}</span>
+                </div>
+                <span class="text-900 font-medium mr-2 mb-1 md:mb-0">{{ q.question?.question }}</span>
+            </div>
+            <div class="mt-2 md:mt-0 flex align-items-center gap-2">
+                <p-button 
+                    icon="pi pi-check" 
+                    severity="success" 
+                    [rounded]="true" 
+                    [text]="q.response !== 'true'" 
+                    (click)="handleQuestionCheck(q, true)">
+                </p-button>
+                <p-button 
+                    icon="pi pi-times" 
+                    severity="danger" 
+                    [rounded]="true" 
+                    [text]="q.response !== 'false'" 
+                    (click)="handleQuestionCheck(q, false)">
+                </p-button>
+            </div>
+        </li> 
+        <p-divider/>
+    </ul>
+
+    <!-- ✅ Bouton de soumission -->
+    <div class="flex justify-content-end mt-4">
+        <p-button 
+            label="Submit Response" 
+            icon="pi pi-send" 
+            severity="primary" 
+            (click)="submitQuestions()" 
+            [disabled]="questions.length === 0">
+        </p-button>
+    </div>
+</div>  
+
+<!-- Affichage des équipements si la section sélectionnée est "Infrastructure" -->
+<div class="card" *ngIf="selectedSection?.nom === 'Infrastructure'">
+  <div class="grid justify-content-between col">
+      <div>
+          <h4 class="mb-5 font-bold">Audit Equipements</h4>
+      </div>
+      <p-button icon="pi pi-plus" label="Equipement" (onClick)="showAddDialog()" class="mx-2"></p-button>
+  </div>
+  <div *ngIf="rawEquipements.length != 0">
+      <div class="grid p-fluid">
+          <div class="col-12" [ngClass]="{'md:col-12' : !selectedEquipement,'md:col-5' : selectedEquipement }">
+            <p-accordion>
+              <p-accordionTab *ngFor="let key of getKeys(groupedEquipements)">
+                <ng-template pTemplate="header">
+                  <span class="flex align-items-center gap-2 w-full" style="word-break: break-all;">
+                    <span class="font-bold">{{ key }}</span>
+                    <p-badge [value]="groupedEquipements[key].length" class="ml-auto mr-2" />
+                  </span>
+                </ng-template>
+            
+                <!-- 🔹 Affichage des équipements de chaque catégorie -->
+                <div class="flex flex-column" *ngFor="let item of groupedEquipements[key]; let i = index">
+                  <div class="flex gap-1 justify-content-between">
+                    <p-button [text]="true" icon="pi pi-eye"  
+                      [label]="item.category + ' ' + item.ref" severity="secondary"
+                      (click)="handleEquipementShow(item)" />
+                    
+                    <div class="flex">
+                      <p-button [text]="true" icon="pi pi-pencil" severity="info"
+                        (click)="handleEquipementEdit(item)" />
+                      <p-button [text]="true" icon="pi pi-trash" severity="danger"
+                        (click)="handleEquipementRemove(item)" />
+                    </div>
+                  </div>
+                </div>
+              </p-accordionTab>
+            </p-accordion>
+            
+          </div>
+          <div class="col-12 md:col-7" *ngIf="selectedEquipement">
+              <div class="card">
+                  <div class="flex justify-content-between align-items-center">
+                      <h5 class="text-bold">Category</h5>
+                      <span>{{ selectedEquipement.category }}</span>
+                  </div>
+                  <p-divider />
+                  <div class="flex justify-content-between align-items-center">
+                      <h5 class="font-bold">Sub category</h5>
+                      <span>{{ selectedEquipement.subcategory }}</span>
+                  </div>
+                  <p-divider />
+                  <div class="flex justify-content-between align-items-center">
+                      <h5 class="font-bold">Manufacturer</h5>
+                      <span>{{ selectedEquipement.manufacturer }}</span>
+                  </div>
+                  <p-divider />
+                  <div class="flex justify-content-between align-items-center">
+                      <h5 class="font-bold">Réference</h5>
+                      <span>{{ selectedEquipement.ref }}</span>
+                  </div>
+                  <p-divider />
+                  <div class="flex justify-content-between align-items-center">
+                      <h5 class="font-bold">Details</h5>
+                      <span>{{ selectedEquipement.details }}</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div *ngIf="rawEquipements.length == 0" class="p-fluid mb-5">
+      <div class="card">
+          <h5 class="mb-0 text-center">No equipement selected yet</h5>   
+      </div>       
+  </div>
+</div>
+
+
+<div class="card" *ngIf="selectedSection?.nom === 'Files'">
+  <h4 class="font-bold">Files</h4>
+  <p-divider/>
+  
+  <p-table [value]="filteredFiles" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+      <ng-template pTemplate="caption">
+          <div class="flex justify-content-end flex-column sm:flex-row">
+               <div></div>
+              <span class="p-input-icon-left mb-2">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text"(input)="handleSearch($event.target.value)" placeholder="Search Keyword" class="w-full"/>
+              </span>
+              <p-button label="Reload" [loading]="loading" (onClick)="fetchFiles()" class="mx-2"></p-button>
+              <p-button label="Add file" severity="success" icon="pi pi-file-import" (onClick)="addFileDialogVisible = true;"></p-button>
+          </div>
+      </ng-template>
+      <!-- table header -->
+      <ng-template pTemplate="header">
+          <tr>
+              <th style="min-width: 12rem">
+                  <div class="flex justify-content-between align-items-center">
+                      Files name
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-between align-items-center">
+                      Actions
+                  </div>
+              </th>        
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-file>
+          <tr>
+              <td>
+                  <div class="flex gap-1 align-items-center">
+                      <div
+                          class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-50 border-circle mr-3 flex-shrink-0">
+                          <i class="pi pi-file text-xl text-blue-500"></i>
+                      </div>
+                      <span class="image-text ml-2">{{file?.title}}</span>
+                  </div>
+              </td>
+              <td>
+                  <div style="display: flex;gap: 5px;">               
+                      <p-button 
+                          severity="danger"
+                          icon="pi pi-trash" 
+                          (click)="handleFileDelete(file?._id);"
+                          [rounded]="true"
+                          [outlined]="true"
+                      ></p-button>                                       
+                  </div>
+              </td>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+          <tr>
+              <td colspan="8">No File found.</td>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="loadingbody">
+          <tr>
+              <td colspan="8">Loading files ... Please wait.</td>
+          </tr>
+      </ng-template>
+  </p-table>
+
+</div>
+
+
+<!-- Affichage des autres sections -->
+<div class="card"  
+     *ngIf="selectedSection && selectedSection?.nom !== 'Questionnaire' && selectedSection?.nom !== 'Infrastructure' && selectedSection?.nom !== 'Contact'  && selectedSection?.nom !== 'Files'">
+  
+  <h4 class="font-bold">{{ selectedSection?.nom }}</h4>
+  <p-divider />
+
+  <form>
+    <div class="p-fluid">
+      <!-- Boucle sur les champs avec type -->
+      <div *ngFor="let champ of selectedSection?.champs" class="field col-12 ">
+        <label class="text-900 font-medium block mb-2">{{ champ.label }}</label>
+
+        <!-- Champ de type texte ou nombre -->
+        <input
+          *ngIf="champ.type === 'text' || champ.type === 'number' || champ.type === 'email' || champ.type === 'date'"
+          [type]="champ.type"
+          class="p-inputtext w-full"
+          pInputText
+          [(ngModel)]="champ.value"
+          [name]="champ.label"
+        />
+
+        <!-- Champ de type textarea -->
+        <textarea
+          *ngIf="champ.type === 'textarea'"
+          class="p-inputtext w-full"
+          rows="3"
+          [(ngModel)]="champ.value"
+          [name]="champ.label"
+        ></textarea>
+
+        <!-- Ajout futur possible : select, checkbox, etc. -->
+      </div>
+    </div>
+  </form>
+
+  <p-button *ngIf="selectedSection?.nom !== 'Contact'"
+            label="Save"
+            severity="success"
+            class="p-mt-3"
+            (click)="updateSectionFields()">
+  </p-button>
+
+</div>
+
+
+
+
+<!-- ✅ Ajout du champ "Remark" DANS TOUTES LES SECTIONS sauf si rejected -->
+<div class="card" *ngIf="selectedSection?.status === 'rejected' && selectedSection?.nom !=='Contact'">
+  <div class="mt-4">
+      <label class="font-bold mb-2">Remark</label>
+      <textarea 
+          pInputTextarea 
+          [value]="selectedSection?.remark"
+          class="p-inputtextarea w-full text-black font-medium" 
+          rows="4"
+          disabled>
+      </textarea>
+    </div>
+</div>
+
+
+<!-- Boutons de navigation -->
+<div class="justify-content-end flex align-items-center gap-2 mt-4">
+  <div class="flex align-items-center gap-2">
+    <p-button *ngIf="selectedSection?.nom !== 'Contact'"
+        label="Confirm" 
+        severity="success" 
+        class="p-mt-3" 
+        (click)="confirmSection()">
+    </p-button>
+
+    <p-button 
+      label="Back" 
+      severity="info"
+      class="p-button-secondary p-mt-3" 
+      (click)="previousStep()" 
+      *ngIf="activeIndex > 0">
+    </p-button>
+
+    <p-button 
+      label="Next" 
+      severity="info"
+      [disabled]="activeIndex >= sections.length - 1" 
+      class="p-button-info p-mt-3" 
+      (click)="nextStep()">
+    </p-button>
+  </div>
+</div>
+<br>
+
+<app-add-equipement-dialog 
+    (dismiss)="addEquipementDialogVisible=false;dialogMode = ''" 
+    (callback)="addNewEquipementCallback($event)"
+    [selectedEquipement]="selectedEquipement"
+    [mode]="dialogMode"
+    [auditId]="auditId"
+    [addEquipementDialogVisible]="addEquipementDialogVisible">
+</app-add-equipement-dialog>
+
+
+<!-- Boîte de dialogue de confirmation -->
+<app-custom-confirm-dialog
+  [key]="'deleteEquipement'"
+  (onAccept)="handleConfirmDelete()"
+  (onReject)="handleCancelDelete()">
+</app-custom-confirm-dialog>
+
+<!-- Boîte de dialogue de confirmation -->
+<app-custom-confirm-dialog
+  [key]="'deleteFile'"
+  (onAccept)="handleConfirmDeleteFile(fileID)"
+  (onReject)="handleCancelDeleteFile()">
+</app-custom-confirm-dialog>
+
+
+<app-file-upload-dialog
+  [visible]="addFileDialogVisible"
+  [auditId]="auditId" 
+  (addCallback)="handleFileAddCallback($event)"  
+  (dismiss)="addFileDialogVisible = false">
+</app-file-upload-dialog>

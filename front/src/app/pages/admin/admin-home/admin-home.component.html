@@ -1,0 +1,107 @@
+<div class="surface-ground min-h-screen p-5">
+
+    <div class="grid">
+
+        <!-- Admins -->
+        <div class="col-12 lg:col-6 xl:col-4">
+            <div class="card surface-card shadow-2 border-round-3xl p-5" >
+                <div class="flex justify-content-between align-items-center mb-4 pb-3 border-bottom-1 surface-border">
+                    <h5 class="text-lg font-bold  m-0">Admins</h5>
+                </div>
+                <div class="flex justify-content-between align-items-center">
+                    <div class=" font-bold text-3xl">{{ dahsboardItems?.users?.admins }}</div>
+                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem; height:2.5rem;">
+                        <i class="pi pi-users  text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auditors -->
+        <div class="col-12 lg:col-6 xl:col-4">
+            <div class="card surface-card shadow-2 border-round-3xl p-5" >
+                <div class="flex justify-content-between align-items-center mb-4 pb-3 border-bottom-1 surface-border">
+                    <h5 class="text-lg font-bold m-0">Auditors</h5>
+                </div>
+                <div class="flex justify-content-between align-items-center">
+                    <div class="font-bold text-3xl">{{ dahsboardItems?.users?.auditors }}</div>
+                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem; height:2.5rem;">
+                        <i class="pi pi-users text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clients -->
+        <div class="col-12 lg:col-6 xl:col-4">
+            <div class="card surface-card shadow-2 border-round-3xl p-5">
+                <div class="flex justify-content-between align-items-center mb-4 pb-3 border-bottom-1 surface-border">
+                    <h5 class="text-lg font-bold m-0">Clients</h5>
+                </div>
+                <div class="flex justify-content-between align-items-center">
+                    <div class=" font-bold text-3xl">{{ dahsboardItems?.users?.clients }}</div>
+                    <div class="flex align-items-center justify-content-center  border-round" style="width:2.5rem; height:2.5rem;">
+                        <i class="pi pi-users text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- All Audits -->
+        <div class="col-12 lg:col-6 xl:col-4">
+            <div class="card surface-card shadow-2 border-round-3xl p-5" >
+                <div class="flex justify-content-between align-items-center mb-4 pb-3 border-bottom-1 surface-border">
+                    <h5 class="text-lg font-bold  m-0">All Audits</h5>
+                </div>
+                <div class="flex justify-content-between align-items-center">
+                    <div class=" font-bold text-3xl">{{ dahsboardItems?.audits?.all }}</div>
+                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem; height:2.5rem;">
+                        <i class="pi pi-folder text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Audits -->
+        <div class="col-12 lg:col-6 xl:col-4">
+            <div class="card surface-card shadow-2 border-round-3xl p-5">
+                <div class="flex justify-content-between align-items-center mb-4 pb-3 border-bottom-1 surface-border">
+                    <h5 class="text-lg font-bold m-0">Pending Audits</h5>
+                </div>
+                <div class="flex justify-content-between align-items-center">
+                    <div class=" font-bold text-3xl">{{ dahsboardItems?.audits?.pending }}</div>
+                    <div class="flex align-items-center justify-content-center  border-round" style="width:2.5rem; height:2.5rem;">
+                        <i class="pi pi-folder-open text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Finished Audits -->
+        <div class="col-12 lg:col-6 xl:col-4">
+            <div class="card surface-card shadow-2 border-round-3xl p-5">
+                <div class="flex justify-content-between align-items-center mb-4 pb-3 border-bottom-1 surface-border">
+                    <h5 class="text-lg font-bold  m-0">Finished Audits</h5>
+                </div>
+                <div class="flex justify-content-between align-items-center">
+                    <div class=" font-bold text-3xl">{{ dahsboardItems?.audits?.finished }}</div>
+                    <div class="flex align-items-center justify-content-center border-round" style="width:2.5rem; height:2.5rem;">
+                        <i class="pi pi-check-circle  text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audits Overview -->
+        <div class="col-12 xl:col-6">
+            <div class="card surface-card shadow-2 border-round-3xl p-5" >
+                <div class="flex justify-content-between align-items-center mb-4 pb-3 border-bottom-1 surface-border">
+                    <h5 class="text-2xl font-bold  m-0">Audits Overview</h5>
+                </div>
+                <p-chart type="doughnut" [data]="auditPieData" [options]="auditPieOptions"></p-chart>
+            </div>
+        </div>
+
+    </div>
+
+</div>

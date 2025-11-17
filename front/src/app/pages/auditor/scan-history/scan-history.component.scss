@@ -1,0 +1,21 @@
+/* Style du bouton */
+.p-button.p-button-help {
+  background-color: #4f772d;
+  color: white;
+  border: 1px solid #4f772d;
+}
+
+/* Tooltip personnalisé */
+.custom-tooltip {
+  position: absolute;
+  background-color: #4f772d;
+  color: #ffffff;
+  padding: 0.5rem;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  top: -30px;
+  left: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.9rem;
+}

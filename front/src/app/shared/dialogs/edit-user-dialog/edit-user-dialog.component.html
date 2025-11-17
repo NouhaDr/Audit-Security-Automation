@@ -1,0 +1,76 @@
+<p-dialog 
+  header="Edit User" 
+  [(visible)]="editDialogVisible" 
+  [modal]="true" 
+  [style]="{ width: '40rem' }" 
+  (onHide)="onDismiss()" 
+  [closable]="true">
+
+  <span class="p-text-secondary block mb-4">Update user information</span>
+
+  <form [formGroup]="userForm" class="p-fluid">
+
+    <!-- First Name -->
+    <div class="field mb-3">
+      <label for="firstName" class="font-semibold text-sm mb-2 block">First Name</label>
+      <input id="firstName" pInputText formControlName="firstName" autocomplete="off" class="w-full" />
+      <small *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched" class="p-error">
+        First name is required
+      </small>
+    </div>
+
+    <!-- Last Name -->
+    <div class="field mb-3">
+      <label for="lastName" class="font-semibold text-sm mb-2 block">Last Name</label>
+      <input id="lastName" pInputText formControlName="lastName" class="w-full" />
+    </div>
+
+    <!-- Email -->
+    <div class="field mb-3">
+      <label for="email" class="font-semibold text-sm mb-2 block">Email</label>
+      <input id="email" pInputText formControlName="email" class="w-full" />
+      <small *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="p-error">
+        A valid email is required
+      </small>
+    </div>
+
+    <!-- Phone -->
+    <div class="field mb-3">
+      <label for="phone" class="font-semibold text-sm mb-2 block">Phone</label>
+      <input id="phone" pInputText formControlName="phone" class="w-full" />
+    </div>
+
+    <!-- Company (if role is CLIENT) -->
+    <div class="field mb-3" *ngIf="selectedUser?.role === 'CLIENT'">
+      <label for="company" class="font-semibold text-sm mb-2 block">Company</label>
+      <input id="company" pInputText formControlName="company" class="w-full" />
+    </div>
+
+    <!-- Address -->
+    <div class="field mb-3">
+      <label for="adresse" class="font-semibold text-sm mb-2 block">Address</label>
+      <input id="adresse" pInputText formControlName="adresse" class="w-full" />
+    </div>
+
+  </form>
+
+  <!-- Footer Buttons -->
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2 border-top pt-3">
+      <p-button 
+        label="Cancel" 
+        severity="danger" 
+        [outlined]="true"
+        (onClick)="onDismiss()">
+      </p-button>
+      <p-button 
+        label="Save" 
+        icon="pi pi-check"
+        severity="contrast" 
+        (onClick)="handleUpdate()" 
+        [disabled]="submitted || !userForm.valid"
+        [loading]="submitted">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>

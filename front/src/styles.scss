@@ -1,0 +1,58 @@
+/* You can add global styles to this file, and also import other style files */
+
+$gutter: 1rem; //for primeflex grid system
+@import "assets/layout/styles/layout/layout.scss";
+
+/* PrimeNG */
+@import "../node_modules/primeng/resources/primeng.min.css";
+@import "../node_modules/primeflex/primeflex.scss";
+@import "../node_modules/primeicons/primeicons.css";
+
+/* Demos */
+@import "assets/demo/styles/flags/flags.css";
+@import "assets/demo/styles/badges.scss";
+@import "assets/demo/styles/code.scss";
+
+.status-PENDING{
+    background-color: #FFD8B2;
+    color: #805B36;
+}
+.status-FINISHED{
+    background-color: #C8E6C9;
+    color: #256029;
+}
+.status-INPROGRESS{
+    background-color: #B3E5FC;
+    color: #23547B;
+}
+.modal-row-title{
+    font-weight: bold;
+}
+.grey-on-hover{
+    border-radius: 10px;
+}
+.grey-on-hover:hover{
+    background-color: rgb(245, 245, 245);
+    cursor: pointer;
+}
+/* Scrollbar track */
+::-webkit-scrollbar {
+    width: 12px;  /* Width of the entire scrollbar */
+}
+
+/* Scrollbar handle */
+::-webkit-scrollbar-thumb {
+    background-color: #cccccc; /* Color of the scrollbar thumb */
+    border-radius: 10px;    /* Roundness of the scrollbar thumb */
+    border: 2px solid #fff; /* Adds a border around the scrollbar thumb */
+}
+
+/* Scrollbar track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;  /* Color of the scrollbar track */
+}
+
+/* Hover state for the scrollbar handle */
+::-webkit-scrollbar-thumb:hover {
+    background: #888888; /* Darken the scrollbar thumb on hover */
+}

@@ -1,0 +1,20 @@
+<p-dialog 
+	header="Update audit progress" 
+	[modal]="true"
+	[(visible)]="visible" 
+	[style]="{ width: '30rem' }" 
+	(onHide)="handleHide()"
+	[breakpoints]="{ '1199px': '75vw', '300px': '90vw' }">
+		<div class="p-fluid grid">
+            <div class="col-12 flex justify-content-center">
+                <p-knob [(ngModel)]="audit.progress" [min]="0" [max]="100" [size]="200" [strokeWidth]="9"/>
+            </div>
+            <div class="col-12">
+                <div class="flex justify-content-end">
+                    <p-button label="Cancel" [text]="true" severity="secondary" (onClick)="handleHide()" />
+                    <p-button label="Save" [outlined]="true" severity="secondary" [loading]='submitted' [disabled]='submitted' (onClick)="handleProgressSubmit()"/>
+                </div>
+            </div>
+        </div>
+
+	</p-dialog>

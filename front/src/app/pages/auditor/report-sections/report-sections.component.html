@@ -1,0 +1,271 @@
+<p-toast></p-toast>  
+
+<div class="card">
+  <h5 class="font-bold">Report Sections</h5>
+
+  <!-- ✅ Ajout du tri avec Drag & Drop -->
+  <p-accordion class="w-full" cdkDropList [cdkDropListData]="sections" (cdkDropListDropped)="drop($event)">
+    <ng-container *ngFor="let section of sections">
+      <p-accordionTab cdkDrag>
+
+        <ng-template pTemplate="header">
+          <div class="flex justify-content-between align-items-center w-full cursor-pointer">
+            
+            <!-- Zone draggable -->
+            <div class="flex align-items-center gap-3" cdkDrag [cdkDragData]="section" (mousedown)="onDragStart($event)" (click)="$event.stopPropagation()">
+              <div class="w-3rem h-3rem flex align-items-center justify-content-center">
+                <i class="pi pi-folder-open text-2xl"></i>
+              </div>
+              <span class="font-bold text-lg text-wrap">{{ section.nom }}</span>
+            </div>
+        
+            <!-- Checkbox sélection -->
+            <p-checkbox 
+              [binary]="true" 
+              [(ngModel)]="section.selected"
+              (click)="$event.stopPropagation()"
+              (onChange)="toggleSection(section, $event)">
+            </p-checkbox>
+        
+          </div>
+        </ng-template>
+        
+        
+        <!-- ✅ Affichage des contacts de l'audit si section = "Contact" -->
+        <div class="p-4 border-round-md shadow-sm" *ngIf="section.nom === 'Contact'">
+
+          <div class="grid">
+            <!-- ✅ Organisation -->
+            <div class="col-12 md:col-6">
+              <label class="font-bold">Organisation:</label>
+              <input type="text" class="p-inputtext w-full bg-gray-100 border-none p-2" 
+                    [value]="audit?.organisationName" disabled />
+            </div>
+
+            <!-- ✅ Contact Number -->
+            <div class="col-12 md:col-6">
+              <label class="font-bold">Contact Number:</label>
+              <input type="text" class="p-inputtext w-full bg-gray-100 border-none p-2" 
+                    [value]="audit?.contactNumber" disabled />
+            </div>
+
+            <!-- ✅ Client -->
+            <div class="col-12 md:col-6">
+              <label class=" font-bold">Client:</label>
+              <input type="text" class="p-inputtext w-full bg-gray-100 border-none p-2" 
+                    [value]="audit?.client?.firstName + ' ' + audit?.client?.lastName" disabled />
+            </div>
+
+            <!-- ✅ Phone Number -->
+            <div class="col-12 md:col-6">
+              <label class="font-bold">Phone Number:</label>
+              <input type="text" class="p-inputtext w-full bg-gray-100 border-none p-2" 
+                    [value]="audit?.phoneNumber" disabled />
+            </div>
+
+            <!-- ✅ Audit Leader -->
+            <div class="col-12 md:col-6">
+              <label class="font-bold">Audit Leader:</label>
+              <input type="text" class="p-inputtext w-full bg-gray-100 border-none p-2" 
+                    [value]="audit?.auditleaders?.firstName + ' ' + audit?.client?.lastName" disabled />
+            </div>
+
+            <!-- ✅ Email -->
+            <div class="col-12 md:col-6">
+              <label class="font-bold">Email:</label>
+              <input type="text" class="p-inputtext w-full bg-gray-100 border-none p-2" 
+                    [value]="audit?.contactEmail" disabled />
+            </div>
+
+            <!-- ✅ Auditors -->
+            <div class="col-12 md:col-6">
+              <label class="font-bold">Auditors:</label>
+              <div class="p-inputtext w-full bg-gray-100 border-none p-2 ">
+                <ul *ngIf="audit?.auditors?.length > 0; else noAuditors" class="list-none p-0 m-0">
+                  <li *ngFor="let auditor of audit.auditors" class="p-1">
+                    {{ auditor.firstName }} {{ auditor.lastName }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- ✅ Website -->
+            <div class="col-12 md:col-6">
+              <label class="font-bold">Website:</label>
+              <input type="text" class="p-inputtext w-full bg-gray-100 border-none p-2" 
+                    [value]="audit?.website" disabled />
+            </div>
+
+            <!-- ✅ Employees Number -->
+            <div class="col-12 md:col-6">
+              <label class="font-bold">Employees Number:</label>
+              <input type="text" class="p-inputtext w-full bg-gray-100 border-none p-2" 
+                    [value]="audit?.employeesNumber" disabled />
+            </div>
+
+            <!-- ✅ Employees in Perimeter -->
+            <div class="col-12 md:col-6">
+              <label class="font-bold">Employees in Perimeter:</label>
+              <input type="text" class="p-inputtext w-full bg-gray-100 border-none p-2" 
+                    [value]="audit?.employeesInPerimeter" disabled />
+            </div>
+          </div>
+        </div>
+
+
+        <!-- ✅ Affichage des équipements si section = "Infrastructure" -->
+        <div class="p-4  border-round-md shadow-sm" *ngIf="section.nom === 'Infrastructure'">
+    
+          <div *ngIf="rawEquipements.length > 0; else noEquipements">
+            <table class="p-datatable p-component w-full">
+              <thead>
+                <tr class="">
+                  <th class="p-2">Category</th>
+                  <th class="p-2">Reference</th>
+                  <th class="p-2">Manufacturer</th>
+                  <th class="p-2">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let equipement of rawEquipements" class="border-bottom">
+                  <td class="p-2 flex align-items-center gap-2">
+                    <i class="pi pi-cog "></i>
+                    {{ equipement.category }}
+                  </td>
+                  <td class="p-2">{{ equipement.ref }}</td>
+                  <td class="p-2" >{{ equipement.manufacturer || 'N/A' }}</td>
+                  <td class="p-2">{{ equipement.details || 'Aucun détail disponible' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- ✅ Message si aucun équipement n'est disponible -->
+          <ng-template #noEquipements>
+            <div class="text-center p-3 border-round-md shadow-sm">
+              <p class="font-bold">⚠️ Aucun équipement enregistré.</p>
+            </div>
+          </ng-template>
+        </div>
+
+
+        <!-- ✅ Affichage des questions si section = "Questionnaire" -->
+        <div class="p-3  border-left-4 border-gray-400 rounded" *ngIf="section.nom === 'Questionnaire'">
+
+          <!-- ✅ Vérification si des questions sont disponibles -->
+          <div *ngIf="questions.length > 0; else noQuestions">
+            <table class="p-datatable p-component w-full">
+              <thead>
+                <tr class="">
+                  <th class="p-2 ">Question</th>
+                  <th class="p-2 ">Category</th>
+                  <th class="p-2 text-center ">Response</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let q of questions; " class="border-bottom ">
+                  <td class="p-2">{{ q.question.question }}</td>
+                  <td class="p-2 ">{{ q.question.category || 'N/A' }}</td>
+                  <td class="p-2 text-center">
+                    <span *ngIf="q.response" class="text-green-600 font-bold">
+                      ✅ Yes
+                    </span>
+                    <span *ngIf="!q.response" class="text-red-600 font-bold">
+                      ❌ No
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- ✅ Message si aucune question n'est disponible -->
+            <ng-template #noQuestions>
+              <div class="text-center p-3 border-round-md shadow-sm">
+                <p class="font-bold">⚠️ Aucune question disponible.</p>
+              </div>
+            </ng-template>
+        </div>
+
+        <!-- ✅ Affichage des fichiers si section = "Files" -->
+        <div class="p-4 border-round-md shadow-sm" *ngIf="section.nom === 'Files'">
+          <!-- ✅ Vérification s'il y a des fichiers -->
+          <div *ngIf="files.length > 0; else noFiles">
+            <ul class="list-none p-0">
+              <li *ngFor="let file of files" class="p-2 border-bottom flex align-items-center gap-3">
+                <i class="pi pi-file text-xl"></i>
+                <span class="font-bold flex-1">{{ file.title }}</span>     
+              </li>
+            </ul>
+          </div>
+
+          <!-- ✅ Message si aucun fichier n'est disponible -->
+          <ng-template #noFiles>
+            <div class="text-center p-3 border-round-md shadow-sm">
+              <p class="font-bold ">⚠️ Aucun fichier disponible.</p>
+            </div>
+          </ng-template>
+        </div>
+
+
+        <!-- ✅ Sections restantes (Autres que Contact, Infrastructure, Questionnaire, Files) -->
+
+        <div class="p-4 border-round surface-100 shadow-2"
+        *ngIf="section && section.nom !== 'Questionnaire' 
+                        && section.nom !== 'Infrastructure' 
+                        && section.nom !== 'Contact' 
+                        && section.nom !== 'Files'">
+
+      <form>
+        <div class="flex flex-column gap-4">
+
+          <div *ngFor="let champ of section.champs">
+            <!-- 🏷️ Label -->
+            <label class="block font-bold mb-2">
+              {{ champ.label }}
+            </label>
+
+            <!-- 🧾 Input types -->
+            <input 
+              *ngIf="champ.type === 'text' || champ.type === 'email' || champ.type === 'number' || champ.type === 'date'" 
+            
+              [type]="champ.type" 
+              [(ngModel)]="champ.value" 
+              [name]="champ.label" 
+              class="p-inputtext w-full p-2" 
+              disabled />
+
+            <!-- 📝 Textarea -->
+            <textarea 
+              *ngIf="champ.type === 'textarea'" 
+              [(ngModel)]="champ.value" 
+              [name]="champ.label" 
+              class="p-inputtext w-full p-2" 
+              rows="3"
+              disabled>
+            </textarea>
+
+            <!-- 📋 Tableau de valeurs (type array) -->
+            <div *ngIf="champ.type === 'array'" class="flex flex-column gap-2">
+              <input 
+                *ngFor="let item of champ.value; let i = index" 
+                type="text" 
+                [value]="item" 
+                [name]="champ.label + '_' + i" 
+                class="p-inputtext w-full p-2" 
+                disabled />
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+      </p-accordionTab>
+    </ng-container>
+  </p-accordion>
+
+  <div class="flex justify-content-end mt-5">
+      <p-button  icon="pi pi-file-pdf" label="Exporter en PDF" severity="contrast" (click)="exportToPDF()"></p-button>
+  </div>
+</div>

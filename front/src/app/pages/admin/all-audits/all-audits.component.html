@@ -1,0 +1,190 @@
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+			<h5 class="font-bold">All audits</h5>
+			<p-table #dt1 [value]="filteredAudits" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-end flex-column sm:flex-row">
+						<!-- <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt1)"></button> -->
+						 <div></div>
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="handleSearch($event)" placeholder="Search Keyword" class="w-full"/>
+						</span>
+						<p-button label="Reload" severity="contrast" [loading]="loading" (onClick)="getAudits()" class="mx-2"></p-button>
+					</div>
+				</ng-template>
+				<!-- table header -->
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 12rem">
+							<div class="flex justify-content-between align-items-center">
+								Auditors
+							</div>
+						</th>
+						<th style="min-width: 12rem">
+							<div class="flex justify-content-between align-items-center">
+								Oragnisation name
+							</div>
+						</th>
+						 <th style="min-width: 14rem">
+							<div class="flex justify-content-between align-items-center">
+								Contact name
+							</div>
+						</th>
+						<th style="min-width: 10rem">
+							<div class="flex justify-content-between align-items-center">
+								Contact email
+							</div>
+						</th>
+						<th style="min-width: 10rem">
+							<div class="flex justify-content-between align-items-center">
+								Status
+							</div>
+						</th>
+						<th style="min-width: 10rem">
+							<div class="flex justify-content-between align-items-center">
+								Progress
+							</div>
+						</th>
+						<th style="min-width: 10rem">
+							<div class="flex justify-content-between align-items-center">
+								Creation date
+							</div>
+						</th>
+						<th style="min-width: 10rem">
+							<div class="flex justify-content-between align-items-center">
+								Actions
+							</div>
+						</th>
+					</tr>
+				</ng-template>
+				<!-- table body -->
+				<ng-template pTemplate="body" let-audit>
+					<tr>
+						<td>
+							<p-avatarGroup>
+								<p-avatar *ngFor="let a of audit?.auditors" 
+									[image]="imagesUrl+'/'+ a.image" 
+									size="large" 
+									shape="circle" 
+									[pTooltip]="a.firstName + ' ' + a.lastName"
+									tooltipPosition="bottom"
+									/>
+							</p-avatarGroup>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{audit.organisationName}}</span>
+						</td>
+						 <td>
+							<span class="image-text ml-2">{{audit.contactName}}</span>
+						</td>
+						 <td>
+							<span class="image-text ml-2">{{audit.contactEmail}}</span>
+						</td>
+						<td>
+							<span 
+							[class]="'customer-badge'"
+							[ngClass]="{
+								'status-new': audit.status === 'PENDING', 
+								'status-qualified': audit.status === 'FINISHED', 
+								'status-renewal': audit.status === 'IN PROGRESS'
+							}"							
+							>{{audit.status}}</span>
+						</td>
+						<td>
+							<div class="mt-2 md:mt-0 flex align-items-center">
+								<div class="surface-300 border-round overflow-hidden w-10rem lg:w-6rem" [ngStyle]="{height: '8px'}">
+									<div class="h-full" [ngClass]="{ 
+										'bg-orange-500' : audit.progress == 0, 
+										'bg-blue-500' : audit.progress > 0,
+										'bg-green-500' : audit.progress == 100 
+									}"
+									[ngStyle]="{width: audit.progress+'%'}"></div>
+								</div>
+								<span class="ml-3 font-medium" [ngClass]="{ 
+									'text-orange-500' : audit.progress == 0, 
+									'text-blue-500' : audit.progress > 0,
+									'text-green-500' : audit.progress == 100 
+								}">{{ audit.progress }}%</span>
+							</div>
+						</td>
+						<td>
+							{{audit.createdAt | date: 'dd/MM/yyyy'}}
+						</td>
+						<td>
+							<div style="display: flex;gap: 5px;">
+								<!-- View Button -->
+								<p-button 
+								pRipple 
+								severity="info"
+								type="button" 
+								[rounded]="true" 
+								[outlined]="true" 
+								icon="pi pi-eye" 
+								class="p-button-rounded p-button-outlined" 
+								(click)="showDetails(audit);dialogVisible=true">
+								</p-button>
+
+								<!-- Edit Button -->
+								<p-button 
+								pRipple 
+								severity="success"
+								type="button" 
+								icon="pi pi-pencil" 
+								[rounded]="true" 
+								[outlined]="true" 
+								class="p-button-rounded p-button-outlined" 
+								(click)="selectedAudit=audit;editDialogVisible=true">
+								</p-button>
+
+							<p-button 
+								icon="pi pi-trash"
+								severity="danger" 
+								[rounded]="true" 
+								[outlined]="true"  
+								[loading]="audit._id === auditDeleteLoading" 
+								[disabled]="audit._id === auditDeleteLoading" 
+								key="accept" 
+								(click)="deleteDialog.show();selectAuditToDlete(audit._id)"
+							></p-button>
+							</div>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="8">No Audits found.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="8">Loading Audits data. Please wait.</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
+
+	</div>
+</div>
+
+<app-custom-confirm-dialog 
+	#deleteDialog
+	[key]="'delete'"
+	(onAccept)="handleAuditDelete()"
+	(onReject)="clearLoading()"
+></app-custom-confirm-dialog>
+
+
+<app-audit-infos-dialog 
+	[visible]="dialogVisible" 
+	(hide)="dialogVisible = false" 
+	[selectedAudit]="selectedAudit">
+</app-audit-infos-dialog>
+
+<app-edit-audit-dialog 
+	[selectedAudit]="selectedAudit" 
+	(callback)="handleAuditUpdate($event)"
+	[editDialogVisible]="editDialogVisible"
+	(dismiss)="editDialogVisible = false"
+></app-edit-audit-dialog>

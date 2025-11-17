@@ -1,0 +1,57 @@
+<p-dialog 
+  header="Update Details" 
+  [(visible)]="visible" 
+  [modal]="true" 
+  [style]="{ width: '40rem' }" 
+  (onHide)="dismiss.emit()" 
+  [closable]="true" 
+  [baseZIndex]="10000">
+
+  <form [formGroup]="form" class="p-fluid">
+    <div class="formgrid grid">
+      
+      <!-- First name -->
+      <div class="field col-12 md:col-6">
+        <label for="firstName" class="font-semibold text-sm mb-2">First Name</label>
+        <input id="firstName" pInputText formControlName="firstName" />
+        <small *ngIf="form.get('firstName')?.invalid && form.get('firstName')?.touched" class="p-error">
+          First name is required
+        </small>
+      </div>
+
+      <!-- Last name -->
+      <div class="field col-12 md:col-6">
+        <label for="lastName" class="font-semibold text-sm mb-2">Last Name</label>
+        <input id="lastName" pInputText formControlName="lastName" />
+        <small *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched" class="p-error">
+          Last name is required
+        </small>
+      </div>
+
+      <!-- Adresse -->
+      <div class="field col-12">
+        <label for="adresse" class="font-semibold text-sm mb-2">Address</label>
+        <input id="adresse" pInputText formControlName="adresse" />
+      </div>
+
+      <!-- Phone -->
+      <div class="field col-12">
+        <label for="phone" class="font-semibold text-sm mb-2">Phone</label>
+        <input id="phone" pInputText formControlName="phone" />
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-content-end mt-4 gap-2">
+      <p-button label="Cancel" severity="danger" [outlined]="true" class="p-button-text" (onClick)="dismiss.emit()"></p-button>
+      <p-button 
+        label="Save" 
+        severity="contrast"
+        icon="pi pi-check" 
+        [disabled]="loading || !form.valid" 
+        [loading]="loading"
+        (onClick)="handleUpdate()">
+      </p-button>
+    </div>
+  </form>
+</p-dialog>

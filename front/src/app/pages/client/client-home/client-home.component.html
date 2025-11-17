@@ -1,0 +1,54 @@
+<p-toast></p-toast>
+
+<div class="grid">
+
+  <!-- Feedbacks -->
+  <div class="col-12 xl:col-6">
+    <div class="card surface-card shadow-2 border-round-xl p-4">
+      <div class="flex justify-content-between align-items-center mb-4 pb-2 border-bottom-1 surface-border">
+        <h5 class="text-2xl font-bold m-0">Feedbacks</h5>
+      </div>
+      <ul class="list-none p-0 m-0">
+        <li *ngFor="let audit of audits"
+            class="flex justify-content-between align-items-center mb-4 p-3 border-round-xl shadow-2 transition-all duration-200">
+          <div class="flex align-items-center gap-2  font-medium text-lg">
+            <i class="pi pi-building  text-xl"></i>
+            <span>{{ audit.organisationName }}</span>
+          </div>
+          <div class="relative">
+            <p-button 
+              icon="pi pi-comment" 
+              severity="info" 
+              [rounded]="true"
+              (click)="openFeedbackDialog(audit)">
+            </p-button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+
+  <div class="col-6">
+    <div class="card surface-card shadow-2 border-round-xl p-4">
+      <p-panel header="Risk Matrix (Severity × Likelihood)">
+        <p-chart 
+          type="bubble"
+          [data]="riskMatrixData"
+          [options]="riskMatrixOptions"
+          style="width: 100%; height: 500px;">
+        </p-chart>
+      </p-panel>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- Dialog Feedback -->
+<app-feedback-dialog 
+[(visible)]="feedbackDialogVisible" 
+[feedbackText]="feedbackText" 
+(feedbackSubmitted)="submitFeedback($event)">
+</app-feedback-dialog>

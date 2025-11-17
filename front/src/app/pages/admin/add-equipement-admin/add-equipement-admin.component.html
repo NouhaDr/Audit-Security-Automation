@@ -1,0 +1,128 @@
+<div class="grid p-fluid">
+    <div class="col-12">
+        <div class="card p-4 shadow-2 border-round">
+            <h5 class="font-bold mb-5 text-900">Add New Equipment</h5>
+
+            <form [formGroup]="createEquipementForm">
+                <div class="formgrid grid">
+                    <!-- Category Selection -->
+                    <div class="field col-12 md:col-6">
+                        <label for="category" class="block mb-2 font-medium text-900">Select Category</label>
+                        <p-dropdown 
+                            id="category"
+                            [options]="categories" 
+                            [showClear]="true" 
+                            formControlName="category" 
+                            placeholder="Select a category"
+                            [style]="{'width':'100%'}"
+                            class="w-full"
+                        />
+                        <small
+                            *ngIf="createEquipementForm.get('category').touched && createEquipementForm.get('category').errors?.['required']"
+                            class="p-error block mt-1">Category is required
+                        </small>
+                    </div>
+
+                    <!-- Sub Category Selection -->
+                    <div class="field col-12 md:col-6">
+                        <label for="subcategory" class="block mb-2 font-medium text-900">Select Sub Category</label>
+                        <p-dropdown 
+                            id="subcategory"
+                            [options]="sub_categories" 
+                            [showClear]="true" 
+                            formControlName="subcategory" 
+                            placeholder="Select a sub category"
+                            [style]="{'width':'100%'}"
+                            class="w-full"
+                        />
+                        <small
+                            *ngIf="createEquipementForm.get('subcategory').touched && createEquipementForm.get('subcategory').errors?.['required']"
+                            class="p-error block mt-1">Sub category is required
+                        </small>
+                    </div>
+
+                    <!-- Reference Field -->
+                    <div class="field col-12 md:col-6">
+                        <label for="ref" class="block mb-2 font-medium text-900">Référence</label>
+                        <p-autoComplete 
+                            id="ref"
+                            formControlName="ref" 
+                            [suggestions]="suggestedEquipements" 
+                            [group]="true"
+                            field="ref"
+                            class="w-full"
+                            placeholder="Enter reference">
+                            <ng-template let-group pTemplate="group">
+                                <div class="flex align-items-center gap-3">
+                                    <div class="w-2rem h-2rem flex align-items-center justify-content-center bg-gray-100 border-circle">
+                                        <i class="pi text-xl text-gray-500" [class]="group?.icon"></i>
+                                    </div>
+                                    <span>{{ group?.category }}</span>
+                                </div>
+                            </ng-template>
+                        </p-autoComplete>
+                        <small
+                            *ngIf="createEquipementForm.get('ref').touched && createEquipementForm.get('ref').errors?.['required']"
+                            class="p-error block mt-1">Référence is required
+                        </small>
+                    </div>
+
+                    <!-- Manufacturer Field -->
+                    <div class="field col-12 md:col-6">
+                        <label for="manufacturer" class="block mb-2 font-medium text-900">Manufacturer</label>
+                        <input 
+                            pInputText 
+                            id="manufacturer" 
+                            type="text" 
+                            formControlName="manufacturer" 
+                            class="w-full"
+                            placeholder="Enter manufacturer"
+                        />
+                        <small
+                            *ngIf="createEquipementForm.get('manufacturer').touched && createEquipementForm.get('manufacturer').errors?.['required']"
+                            class="p-error block mt-1">Manufacturer is required
+                        </small>
+                    </div>
+
+                    <!-- Details Field -->
+                    <div class="field col-12">
+                        <label for="details" class="block mb-2 font-medium text-900">Details</label>
+                        <input 
+                            pInputText 
+                            id="details" 
+                            type="text" 
+                            formControlName="details" 
+                            class="w-full"
+                            placeholder="Enter details"
+                        />
+                        <small
+                            *ngIf="createEquipementForm.get('details').touched && createEquipementForm.get('details').errors?.['required']"
+                            class="p-error block mt-1">Details are required
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Form Buttons -->
+                <div class="flex justify-content-end gap-3 mt-5">
+                    <p-button 
+                        label="Cancel" 
+                        severity="danger" 
+                        icon="pi pi-times" 
+                        [outlined]="true"
+                        (onClick)="onDismiss()" 
+                        styleClass="w-13"
+                    />
+                    <p-button 
+                        label="Add" 
+                        severity="contrast" 
+                        icon="pi pi-check" 
+                        (onClick)="handleSubmit()"
+                        [disabled]="submitted || !createEquipementForm.valid" 
+                        styleClass=" w-15"
+                    />
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
